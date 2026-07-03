@@ -125,6 +125,8 @@ def git_status(source_path: Path) -> dict[str, Any]:
 
 
 def add_issue(issues: list[Issue], severity: str, project: str, check: str, detail: str) -> None:
+    if severity not in {"error", "warning", "pending"}:
+        raise ValueError(f"invalid severity: {severity}")
     issues.append(Issue(severity=severity, project=project, check=check, detail=detail))
 
 
@@ -152,9 +154,12 @@ def evaluate_bike_share(artifact_path: Path, issues: list[Issue]) -> dict[str, A
 
     station_ready = bool(station_readiness.get("ready_for_prospective_validation"))
     if not station_ready:
+        station_count = int(station_readiness.get("snapshot_count", 0))
+        min_required = int(station_readiness.get("min_required_snapshots", 268))
+        severity = "error" if station_count >= min_required else "pending"
         add_issue(
             issues,
-            "warning",
+            severity,
             "bike-share-demand-resilience",
             "station_prospective_readiness",
             (
@@ -168,7 +173,7 @@ def evaluate_bike_share(artifact_path: Path, issues: list[Issue]) -> dict[str, A
     seoul_min = int(seoul_validation.get("min_snapshots_for_validation", 24))
     seoul_status = str(seoul_validation.get("validation_status", "UNKNOWN"))
     if seoul_status != "READY":
-        severity = "error" if seoul_snapshot_count >= seoul_min else "warning"
+        severity = "error" if seoul_snapshot_count >= seoul_min else "pending"
         add_issue(
             issues,
             severity,
@@ -238,7 +243,7 @@ def evaluate_control_tower(artifact_path: Path, issues: list[Issue]) -> dict[str
     if decisions.get("public_deploy") != "GO":
         add_issue(
             issues,
-            "warning",
+            "pending",
             "decisionops-control-tower",
             "public_deploy",
             f"{decisions.get('public_deploy')} by design until upstream validation is READY",
@@ -350,6 +355,7 @@ def build_status(
     issues = [issue for project in projects for issue in project["issues"]]
     errors = [issue for issue in issues if issue["severity"] == "error"]
     warnings = [issue for issue in issues if issue["severity"] == "warning"]
+    pending = [issue for issue in issues if issue["severity"] == "pending"]
     return {
         "generated_at_kst": now_kst(),
         "registry": str(registry),
@@ -358,6 +364,7 @@ def build_status(
             "project_count": len(projects),
             "error_count": len(errors),
             "warning_count": len(warnings),
+            "pending_count": len(pending),
             "runtime_checked": check_runtime,
             "strict_runtime": strict_runtime,
         },
@@ -374,8 +381,9 @@ def markdown_status(status: dict[str, Any]) -> str:
         f"- Overall: `{'OK' if status['ok'] else 'CHECK_REQUIRED'}`",
         f"- Errors: `{status['summary']['error_count']}`",
         f"- Warnings: `{status['summary']['warning_count']}`",
+        f"- Pending gates: `{status['summary'].get('pending_count', 0)}`",
         "",
-        "| Project | Git | Quality min | Key state | Issues |",
+        "| Project | Git | Quality min | Key state | Open items |",
         "|---|---|---:|---|---:|",
     ]
     for project in status["projects"]:
@@ -418,14 +426,26 @@ def markdown_status(status: dict[str, Any]) -> str:
             + " |"
         )
 
-    if status["issues"]:
+    active_issues = [issue for issue in status["issues"] if issue["severity"] != "pending"]
+    pending_issues = [issue for issue in status["issues"] if issue["severity"] == "pending"]
+
+    if active_issues:
         lines.extend(["", "## Issues", ""])
-        for issue in status["issues"]:
+        for issue in active_issues:
             lines.append(
                 f"- `{issue['severity']}` `{issue['project']}` `{issue['check']}`: {issue['detail']}"
             )
     else:
         lines.extend(["", "## Issues", "", "- 없음"])
+
+    if pending_issues:
+        lines.extend(["", "## Pending Gates", ""])
+        for issue in pending_issues:
+            lines.append(
+                f"- `{issue['project']}` `{issue['check']}`: {issue['detail']}"
+            )
+    else:
+        lines.extend(["", "## Pending Gates", "", "- 없음"])
 
     return "\n".join(lines) + "\n"
 

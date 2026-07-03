@@ -32,11 +32,11 @@ def test_parse_quality_scores_accepts_decimal_scores(tmp_path):
     assert parsed["min_category"] == "b"
 
 
-def test_markdown_status_marks_expected_warning_without_error():
+def test_markdown_status_marks_expected_pending_without_warning():
     status = {
         "generated_at_kst": "2026-07-03T10:00:00+09:00",
         "ok": True,
-        "summary": {"error_count": 0, "warning_count": 1},
+        "summary": {"error_count": 0, "warning_count": 0, "pending_count": 1},
         "projects": [
             {
                 "slug": "bike-share-demand-resilience",
@@ -49,12 +49,12 @@ def test_markdown_status_marks_expected_warning_without_error():
                     "seoul_min_snapshots_for_validation": 24,
                     "seoul_validation_status": "NOT_READY",
                 },
-                "issues": [{"severity": "warning"}],
+                "issues": [{"severity": "pending"}],
             }
         ],
         "issues": [
             {
-                "severity": "warning",
+                "severity": "pending",
                 "project": "bike-share-demand-resilience",
                 "check": "seoul_validation",
                 "detail": "status=NOT_READY, snapshots=6/24",
@@ -66,7 +66,9 @@ def test_markdown_status_marks_expected_warning_without_error():
 
     assert "Overall: `OK`" in text
     assert "Seoul 6/24 NOT_READY" in text
-    assert "`warning` `bike-share-demand-resilience` `seoul_validation`" in text
+    assert "Warnings: `0`" in text
+    assert "Pending gates: `1`" in text
+    assert "`bike-share-demand-resilience` `seoul_validation`" in text
 
 
 def test_write_outputs_creates_json_and_markdown(tmp_path):
