@@ -1,0 +1,8 @@
+.env
+data/job_market.sqlite
+data/raw/
+data/processed/
+reports/job_market_report.md
+reports/job_market_report.html
+__pycache__/
+.pytest_cache/

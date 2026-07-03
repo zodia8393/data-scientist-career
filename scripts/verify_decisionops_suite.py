@@ -21,6 +21,13 @@ DEFAULT_STATE_DIR = Path("/DATA/HJ/prj/data-scientist-career/state")
 DEFAULT_STATUS_JSON = DEFAULT_STATE_DIR / "decisionops_suite_status.json"
 DEFAULT_STATUS_MD = DEFAULT_STATE_DIR / "decisionops_suite_status.md"
 KST = ZoneInfo("Asia/Seoul")
+DECISIONOPS_SUITE_SLUGS = frozenset(
+    {
+        "bike-share-demand-resilience",
+        "agentic-decisionops-workbench",
+        "decisionops-control-tower",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -351,6 +358,7 @@ def build_status(
     projects = [
         evaluate_project(item, check_runtime=check_runtime, strict_runtime=strict_runtime)
         for item in registry_payload.get("projects", [])
+        if str(item.get("slug", "")) in DECISIONOPS_SUITE_SLUGS
     ]
     issues = [issue for project in projects for issue in project["issues"]]
     errors = [issue for issue in issues if issue["severity"] == "error"]

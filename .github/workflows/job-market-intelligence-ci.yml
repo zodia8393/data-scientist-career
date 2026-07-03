@@ -1,0 +1,43 @@
+name: job-market-intelligence-ci
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "job-market-intelligence/**"
+      - ".github/workflows/job-market-intelligence-ci.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "job-market-intelligence/**"
+      - ".github/workflows/job-market-intelligence-ci.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: job-market-intelligence
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: job-market-intelligence/requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+
+      - name: Syntax check
+        run: python -m py_compile job_market_intel/*.py job_market_intel/providers/*.py tests/*.py
+
+      - name: Unit and demo tests
+        run: scripts/run_all.sh

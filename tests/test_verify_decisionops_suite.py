@@ -86,3 +86,12 @@ def test_write_outputs_creates_json_and_markdown(tmp_path):
 
     assert json.loads(status_json.read_text(encoding="utf-8"))["ok"] is True
     assert "DecisionOps Suite Status" in status_md.read_text(encoding="utf-8")
+
+
+def test_decisionops_suite_slug_filter_is_explicit():
+    assert verifier.DECISIONOPS_SUITE_SLUGS == {
+        "bike-share-demand-resilience",
+        "agentic-decisionops-workbench",
+        "decisionops-control-tower",
+    }
+    assert "job-market-intelligence" not in verifier.DECISIONOPS_SUITE_SLUGS

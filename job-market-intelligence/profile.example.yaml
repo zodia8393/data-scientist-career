@@ -1,0 +1,50 @@
+target_roles:
+  - Data Scientist
+  - Applied AI
+  - ML Engineer
+  - Product Data Scientist
+preferred_locations:
+  - 서울
+  - 경기
+  - 원격
+skills:
+  - Python
+  - SQL
+  - pandas
+  - scikit-learn
+  - DuckDB
+  - FastAPI
+  - time series
+  - optimization
+  - geospatial
+  - MLOps
+domains:
+  - mobility
+  - transportation
+  - operations
+  - data product
+avoid_keywords:
+  - 영업
+  - 단순 사무
+  - 콜센터
+min_salary_optional: null
+experience_years: 5
+projects:
+  - name: Bike-share demand resilience
+    domains: [mobility, operations, forecasting]
+    skills: [Python, pandas, scikit-learn, time series, optimization, geospatial]
+    evidence_bullets:
+      - "시간대별 수요 예측, 시간순 검증, conformal interval, segment audit을 포함한 운영 의사결정 데모를 구현했다."
+      - "station-level priority와 재배치 후보를 생성하고 모델 한계와 배포 NO_GO 조건을 문서화했다."
+  - name: Traffic data platform analytics
+    domains: [transportation, data product, operations]
+    skills: [Python, SQL, DuckDB, pandas, geospatial]
+    evidence_bullets:
+      - "대용량 교통 데이터를 DuckDB와 pandas 기반으로 정제, 집계, 검증해 정책 분석 산출물을 만들었다."
+      - "행수, 합계, 날짜 범위, 공간 단위 검증을 통해 재현 가능한 분석 파이프라인을 구성했다."
+  - name: DecisionOps control tower
+    domains: [operations, data product, AI governance]
+    skills: [FastAPI, SQLite, MLOps, Python]
+    evidence_bullets:
+      - "ML 산출물, review queue, approval history, deployment readiness gate를 하나의 운영 대시보드로 연결했다."
+      - "자동 실행 대신 evidence citation과 human review handoff를 남기는 guardrail 중심 의사결정 흐름을 구현했다."

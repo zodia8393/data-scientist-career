@@ -164,6 +164,41 @@
         "docker_smoke_script": "/workspace/prj/data-scientist-career/decisionops-control-tower/scripts/verify_docker_deployment.sh",
         "compose_smoke_script": "/workspace/prj/data-scientist-career/decisionops-control-tower/scripts/verify_compose_deployment.sh"
       }
+    },
+    {
+      "slug": "job-market-intelligence",
+      "title": "Job Market Intelligence for DS Career Transition",
+      "status": "demo_ready",
+      "source_path": "/workspace/prj/data-scientist-career/job-market-intelligence",
+      "remote_url": "git@github.com:zodia8393/data-scientist-career.git",
+      "github_url": "https://github.com/zodia8393/data-scientist-career",
+      "artifact_path": "/workspace/prj/data-scientist-career/job-market-intelligence/reports",
+      "last_reviewed": "2026-07-03",
+      "quality_gate_min_score": 90,
+      "best_model": "rule_based_fit_score",
+      "primary_metrics": {
+        "fixture_raw_items": 6,
+        "fixture_filtered_target_items": 5,
+        "fixture_deduped_jobs": 4,
+        "fixture_scored_jobs": 4,
+        "saramin_provider_structure": true,
+        "saramin_fixture_fallback": true,
+        "pytest_passed": true
+      },
+      "required_next_action": "Add Work24 XML provider and Wanted Jobs provider after API credentials/contracts are available; calibrate salary and seniority scoring with real collected data.",
+      "known_risks": [
+        "Saramin is the only real API collector implemented in this pass; other providers are documented extension targets.",
+        "Fixture data is synthetic and should not be presented as market statistics.",
+        "Fit score is rule-based and should be calibrated with real application outcomes before operational use."
+      ],
+      "key_artifacts": {
+        "readme": "/workspace/prj/data-scientist-career/job-market-intelligence/README.md",
+        "api_sources": "/workspace/prj/data-scientist-career/job-market-intelligence/docs/api_sources.md",
+        "portfolio_story": "/workspace/prj/data-scientist-career/job-market-intelligence/docs/portfolio_story.md",
+        "sample_fixture": "/workspace/prj/data-scientist-career/job-market-intelligence/data/fixtures/sample_jobs.json",
+        "demo_report": "/workspace/prj/data-scientist-career/job-market-intelligence/reports/job_market_report.md",
+        "run_script": "/workspace/prj/data-scientist-career/job-market-intelligence/scripts/run_all.sh"
+      }
     }
   ],
   "next_project_candidate_notes": [

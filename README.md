@@ -9,6 +9,7 @@
 | `bike-share-demand-resilience` | portfolio-ready | 시간대별 공공자전거 수요 예측, 시간순 검증, conformal interval, segment audit, 재배치 최적화 데모 |
 | `agentic-decisionops-workbench` | portfolio-ready | 운영 ML 산출물과 NY 511 public incident sample을 MCP-style tools, guardrail, holdout eval, review queue로 연결 |
 | `decisionops-control-tower` | product-slice-ready | Stage 1/2 산출물을 FastAPI, OpenAPI, SQLite approval history, reviewer dashboard로 묶는 최종 capstone |
+| `job-market-intelligence` | demo-ready | 한국 채용공고 공식 API/fixture 기반 DS 이직 시장 분석, fit score, skill gap, resume bullet 추천 시스템 |
 
 상세 상태와 산출물 경로는 `registry/projects.json`를 기준으로 봅니다.
 
@@ -40,7 +41,7 @@ python3 scripts/validate_weekend_project.py \
   --stage sunday
 ```
 
-세 프로젝트 전체 상태 확인:
+DecisionOps suite 상태 확인:
 
 ```bash
 cd /workspace/prj/data-scientist-career

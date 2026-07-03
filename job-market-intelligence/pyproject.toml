@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "job-market-intelligence"
+version = "0.1.0"
+description = "Korean job posting API market intelligence and personalized application prioritization for data science career transition."
+requires-python = ">=3.10"
+dependencies = [
+  "pandas",
+  "pydantic",
+  "python-dotenv",
+  "pyyaml",
+  "requests",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+include = ["job_market_intel*"]
