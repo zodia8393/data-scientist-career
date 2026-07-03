@@ -1,0 +1,23 @@
+# Nested project repositories are versioned separately.
+bike-share-demand-resilience/
+decisionops-control-tower/
+
+# Local environments and caches.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Generated artifacts live under /DATA/HJ/prj/data-scientist-career.
+projects/
+artifacts/
+reports/
+figures/
+models/
+*.sqlite
+*.db
+
+# Local secrets.
+.env
+.env.*
+!.env.example
