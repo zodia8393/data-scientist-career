@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "updated": "2026-07-03",
+  "updated": "2026-07-06",
   "source_root": "/workspace/prj/data-scientist-career",
   "artifact_root": "/DATA/HJ/prj/data-scientist-career",
   "default_language": "ko",
@@ -73,8 +73,8 @@
       "remote_url": "git@github.com:zodia8393/data-scientist-career.git",
       "github_url": "https://github.com/zodia8393/data-scientist-career",
       "artifact_path": "/DATA/HJ/prj/data-scientist-career/projects/agentic-decisionops-workbench",
-      "last_reviewed": "2026-07-03",
-      "quality_gate_min_score": 94.0,
+      "last_reviewed": "2026-07-06",
+      "quality_gate_min_score": 94.9,
       "best_model": "guarded_decision_agent",
       "primary_metrics": {
         "main_task_success_rate": 1.0,
@@ -82,15 +82,19 @@
         "invalid_action_rate": 0.0,
         "guardrail_match_rate": 1.0,
         "evidence_citation_rate": 1.0,
-        "review_queue_items": 42,
+        "review_queue_items": 54,
         "prepublish_public_registry_allowed": true,
-        "ny_511_event_sample_rows": 120
+        "ny_511_event_sample_rows": 120,
+        "impact_candidate_units_addressed": 848,
+        "impact_public_claim_state": "blocked_until_public_deploy_ready",
+        "impact_public_claim_blocked_cards": 12
       },
-      "required_next_action": "Use this as the Stage 2 bridge; next depth is impact-aware guardrails for Seoul Ddareungi recommendations before any LLM-backed planner or hosted demo hardening.",
+      "required_next_action": "Use this as the Stage 2 bridge; next depth is LLM-backed planner ablation or hosted demo hardening, while verified public impact claims remain blocked until Control Tower public deploy becomes GO.",
       "known_risks": [
         "NY 511 sample is historical open data and not a live dispatch authority.",
         "LLM-backed planner is not connected yet; deterministic regression and holdout suites are the current evaluation surface.",
-        "Hosted demo and LLM-backed planner remain optional hardening after Control Tower."
+        "Hosted demo and LLM-backed planner remain optional hardening after Control Tower.",
+        "Seoul impact cards are validated local review evidence, but verified public impact claims remain blocked while Control Tower public deploy is NO_GO."
       ],
       "key_artifacts": {
         "readme": "/workspace/prj/data-scientist-career/agentic-decisionops-workbench/README.md",
@@ -112,13 +116,13 @@
       "remote_url": "git@github.com:zodia8393/decisionops-control-tower.git",
       "github_url": "https://github.com/zodia8393/decisionops-control-tower",
       "artifact_path": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower",
-      "last_reviewed": "2026-07-03",
-      "quality_gate_min_score": 94,
+      "last_reviewed": "2026-07-05",
+      "quality_gate_min_score": 94.9,
       "best_model": "control_state_rules_fastapi_sqlite",
       "primary_metrics": {
         "demo_mode_ready": true,
         "public_deploy_ready": false,
-        "review_queue_items": 42,
+        "review_queue_items": 54,
         "guarded_success_rate": 1.0,
         "holdout_success_rate": 1.0,
         "approval_store": "sqlite",
@@ -130,17 +134,23 @@
         "docker_smoke": true,
         "compose_smoke": true,
         "impact_card_rows": 12,
-        "impact_candidate_units_addressed": 742,
+        "impact_candidate_units_addressed": 848,
+        "impact_public_claim_blocked_units": 848,
+        "impact_policy_audit_rows": 8,
+        "impact_unsupported_claim_units_avoided": 848,
+        "impact_policy_violation_reduction": 12,
+        "reviewer_action_plan_rows": 8,
+        "reviewer_action_plan_candidate_units": 612,
         "seoul_priority_rows": 50,
-        "seoul_snapshot_count": 6,
-        "seoul_validation_status": "NOT_READY",
-        "seoul_model_status": "NOT_READY"
+        "seoul_snapshot_count": 79,
+        "seoul_validation_status": "READY",
+        "seoul_model_status": "READY"
       },
-            "required_next_action": "Keep public deploy NO_GO until bike-share prospective readiness and Seoul validation are READY; next product step is impact-aware Stage 2 guardrails or verified-impact cards after at least 24 Seoul snapshots.",
+      "required_next_action": "Keep public deploy NO_GO until bike-share prospective readiness and hosted/private deployment hardening are complete; after public deploy becomes GO, split verified external-claim units from local reviewer evidence in the policy audit.",
       "known_risks": [
         "Approval persistence is local SQLite and RBAC-lite uses role credentials rather than a full identity provider.",
         "Public deploy remains NO_GO until bike-share prospective readiness is READY.",
-        "Seoul Ddareungi impact cards are local review evidence while validation status is NOT_READY.",
+        "Seoul Ddareungi impact cards are local review evidence while public deploy readiness is NO_GO.",
         "Approval POST is intentionally limited to local audit history and does not dispatch field actions."
       ],
       "key_artifacts": {
@@ -151,6 +161,10 @@
         "review_queue": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/control_review_queue.csv",
         "impact_cards": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/impact_cards.csv",
         "impact_cards_json": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/impact_cards.json",
+        "impact_policy_audit": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/impact_policy_audit.csv",
+        "impact_policy_audit_json": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/impact_policy_audit.json",
+        "reviewer_action_plan": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/reviewer_action_plan.csv",
+        "reviewer_action_plan_json": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/reviewer_action_plan.json",
         "approval_db": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/control_tower.sqlite",
         "dashboard": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/dashboard/index.html",
         "run_script": "/workspace/prj/data-scientist-career/decisionops-control-tower/scripts/run_all.sh",

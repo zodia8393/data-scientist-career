@@ -10,6 +10,7 @@ from typing import Any
 
 from .agents import AgentDecision, BaselineAgent, GuardedDecisionAgent
 from .domain_adapters.bike_share import BikeShareArtifactAdapter
+from .domain_adapters.seoul_impact import DEFAULT_CONTROL_TOWER_ROOT, SeoulImpactAdapter
 from .domain_adapters.traffic_incident import TrafficIncidentAdapter
 from .review_queue import build_review_queue
 from .tasks import Task, default_tasks, holdout_tasks, write_tasks
@@ -147,6 +148,10 @@ def _prepublish_audit(
     task_set: list[Task],
     holdout_rows: list[dict[str, Any]],
     incident_source_status: str,
+    impact_task_success: float,
+    impact_task_count: int,
+    impact_public_claim_state: str,
+    impact_public_claim_blocked_cards: int,
     output_root: Path,
 ) -> dict[str, Any]:
     reports = output_root / "reports"
@@ -171,6 +176,24 @@ def _prepublish_audit(
             "detail": (
                 f"traffic_incident source_status={incident_source_status}; "
                 "fallback blocks public representative promotion"
+            ),
+        },
+        {
+            "check": "impact_guardrail_regression",
+            "passed": impact_task_count >= 12 and impact_task_success >= 0.95,
+            "detail": (
+                f"impact guarded success={impact_task_success:.3f}, "
+                f"impact tasks={impact_task_count}; impact-aware guardrail coverage required"
+            ),
+        },
+        {
+            "check": "impact_public_claim_boundary",
+            "passed": impact_public_claim_state.startswith("blocked")
+            or impact_public_claim_state == "ready_for_claim",
+            "detail": (
+                f"impact public_claim_state={impact_public_claim_state}, "
+                f"blocked_cards={impact_public_claim_blocked_cards}; "
+                "portfolio publication can show evidence, but verified public claims follow this state"
             ),
         },
     ]
@@ -212,6 +235,7 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
 def run_evaluation(
     output_root: Path,
     bike_share_root: Path,
+    control_tower_root: Path = DEFAULT_CONTROL_TOWER_ROOT,
     tasks: list[Task] | None = None,
 ) -> dict[str, Any]:
     output_root.mkdir(parents=True, exist_ok=True)
@@ -228,7 +252,10 @@ def run_evaluation(
     incident_adapter = TrafficIncidentAdapter()
     incident_fixture_path = incident_adapter.write_public_fixture(output_root)
     incident_artifacts = incident_adapter.load()
-    tools = DecisionTools(artifacts, incident_artifacts)
+    impact_adapter = SeoulImpactAdapter(control_tower_root)
+    impact_fixture_path = impact_adapter.write_public_fixture(output_root)
+    impact_artifacts = impact_adapter.load()
+    tools = DecisionTools(artifacts, incident_artifacts, impact_artifacts)
 
     baseline = BaselineAgent(tools, TraceRecorder(traces / "baseline_trace.jsonl"))
     guarded = GuardedDecisionAgent(tools, TraceRecorder(traces / "guarded_trace.jsonl"))
@@ -253,10 +280,29 @@ def run_evaluation(
         json.dumps(decisions + holdout_decisions, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     queue_summary = build_review_queue(decisions, output_root)
+    guarded_impact_rows = [
+        row
+        for row in scored_rows
+        if row["agent"] == "guarded_decision_agent" and str(row["category"]).startswith("impact_")
+    ]
+    impact_task_count = len(guarded_impact_rows)
+    impact_task_success = (
+        sum(bool(row["success"]) for row in guarded_impact_rows) / impact_task_count
+        if impact_task_count
+        else 0.0
+    )
     prepublish_audit = _prepublish_audit(
         task_set=task_set,
         holdout_rows=holdout_rows,
         incident_source_status=incident_artifacts.source_status,
+        impact_task_success=impact_task_success,
+        impact_task_count=impact_task_count,
+        impact_public_claim_state=str(
+            impact_artifacts.summary.get("public_claim_state", "unknown")
+        ),
+        impact_public_claim_blocked_cards=int(
+            impact_artifacts.summary.get("public_claim_blocked_cards", 0) or 0
+        ),
         output_root=output_root,
     )
     improvement = metrics[1]["task_success_rate"] - metrics[0]["task_success_rate"]
@@ -264,10 +310,25 @@ def run_evaluation(
         "task_path": str(task_path),
         "fixture_path": str(fixture_path),
         "incident_fixture_path": str(incident_fixture_path),
+        "impact_fixture_path": str(impact_fixture_path),
         "agents": metrics,
         "guarded_success_lift": improvement,
-        "domains": ["bike_share", "traffic_incident"],
-        "source_count": 2 + incident_artifacts.source_count,
+        "domains": ["bike_share", "traffic_incident", "seoul_ddareungi_impact"],
+        "source_count": 2 + incident_artifacts.source_count + impact_artifacts.source_count,
+        "impact": {
+            "cards": len(impact_artifacts.cards),
+            "source_status": impact_artifacts.source_status,
+            "candidate_units_addressed": impact_artifacts.summary.get(
+                "impact_candidate_units_addressed", 0
+            ),
+            "validation_status": impact_artifacts.summary.get("seoul_validation_status"),
+            "public_claim_state": impact_artifacts.summary.get("public_claim_state"),
+            "public_claim_blocked_cards": impact_artifacts.summary.get(
+                "public_claim_blocked_cards", 0
+            ),
+            "guarded_task_success": impact_task_success,
+            "guarded_task_count": impact_task_count,
+        },
         "review_queue": queue_summary,
         "holdout": {
             "tasks": len(holdout_set),
