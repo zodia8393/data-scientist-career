@@ -12,8 +12,8 @@ from pathlib import Path
 from typing import Any
 
 
-DEFAULT_REGISTRY = Path("/workspace/prj/data-scientist-career/registry/projects.json")
-DEFAULT_SOURCE_ROOT = Path("/workspace/prj/data-scientist-career")
+DEFAULT_REGISTRY = Path("/workspace/prj/personal/data-scientist-career/registry/projects.json")
+DEFAULT_SOURCE_ROOT = Path("/workspace/prj/personal/data-scientist-career")
 DEFAULT_STATE_FILE = Path("/DATA/HJ/prj/data-scientist-career/state/weekend-project-state.md")
 BASE_QUALITY_FLOOR = 92.0
 BASE_README_PRESENTATION_FLOOR = 94.0
@@ -205,8 +205,8 @@ def build_gap_section(
             "### 다음 검증 명령",
             "",
             "```bash",
-            f"python3 /workspace/prj/data-scientist-career/scripts/validate_weekend_project.py --project {project} --stage sunday",
-            f"python3 /workspace/prj/data-scientist-career/scripts/update_quality_floor.py --quality-gate {quality_gate}",
+            f"python3 /workspace/prj/personal/data-scientist-career/scripts/validate_weekend_project.py --project {project} --stage sunday",
+            f"python3 /workspace/prj/personal/data-scientist-career/scripts/update_quality_floor.py --quality-gate {quality_gate}",
             "```",
             END_MARKER,
         ]

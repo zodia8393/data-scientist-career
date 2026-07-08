@@ -1,17 +1,22 @@
 # Data Scientist Career Portfolio
 
-주말 단위로 데이터 사이언스 포트폴리오 프로젝트를 만들고 개선하는 로컬 Codex 작업 영역입니다. 완성된 소스 repo는 `/workspace/prj/data-scientist-career/<project-slug>`에 두고, 데이터·모델·큰 산출물은 `/DATA/HJ/prj/data-scientist-career/projects/<project-slug>`에 둡니다.
+주말 단위로 데이터 사이언스 포트폴리오 프로젝트와 이직 준비용 개인 도구를 만들고 개선하는 로컬 Codex 작업 영역입니다. 완성된 소스 repo는 `/workspace/prj/personal/data-scientist-career/<project-slug>`에 두고, 데이터·모델·큰 산출물은 `/DATA/HJ/prj/data-scientist-career/projects/<project-slug>`에 둡니다.
 
-## 현재 프로젝트
+## DecisionOps Suite
 
 | slug | 상태 | 요약 |
 |---|---|---|
 | `bike-share-demand-resilience` | portfolio-ready | 시간대별 공공자전거 수요 예측, 시간순 검증, conformal interval, segment audit, 재배치 최적화 데모 |
-| `agentic-decisionops-workbench` | portfolio-ready | 운영 ML 산출물과 NY 511 public incident sample을 MCP-style tools, guardrail, holdout eval, review queue로 연결 |
+| `agentic-decisionops-workbench` | portfolio-ready | 운영 ML 산출물과 NY 511 public incident sample을 MCP-style tools, FastAPI guardrail boundary, holdout eval, review queue로 연결 |
 | `decisionops-control-tower` | product-slice-ready | Stage 1/2 산출물을 FastAPI, OpenAPI, SQLite approval history, reviewer dashboard로 묶는 최종 capstone |
-| `job-market-intelligence` | demo-ready | 한국 채용공고 공식 API/fixture 기반 DS 이직 시장 분석, fit score, skill gap, resume bullet 추천 시스템 |
 
-상세 상태와 산출물 경로는 `registry/projects.json`를 기준으로 봅니다.
+## 개인 이직 준비 도구
+
+| slug | 상태 | 요약 |
+|---|---|---|
+| `job-market-intelligence` | demo-ready | 한국 채용공고 공식 API/fixture 기반 DS 이직 시장 분석, fit score, skill gap, resume bullet 추천 시스템. DecisionOps Suite에 묶지 않는다. |
+
+상세 상태와 산출물 경로는 `registry/projects.json`를 기준으로 봅니다. Registry의 `portfolio_track`과 `decisionops_suite` 값으로 DecisionOps 묶음과 개인 이직 준비 도구를 구분합니다.
 
 ## 로컬 Codex Workflow
 
@@ -20,12 +25,12 @@
 - 프로젝트 registry: `registry/projects.json`
 - 새 프로젝트 scaffold: `scripts/scaffold_weekend_project.py`
 - checklist validator: `scripts/validate_weekend_project.py`
-- DecisionOps suite verifier: `scripts/verify_decisionops_suite.py`
+- DecisionOps suite verifier: `scripts/verify_decisionops_suite.py` (`job-market-intelligence` 제외)
 
 새 프로젝트 dry-run:
 
 ```bash
-cd /workspace/prj/data-scientist-career
+cd /workspace/prj/personal/data-scientist-career
 python3 scripts/scaffold_weekend_project.py \
   --slug example-demand-forecast \
   --title "예시 수요 예측 프로젝트" \
@@ -37,14 +42,14 @@ python3 scripts/scaffold_weekend_project.py \
 
 ```bash
 python3 scripts/validate_weekend_project.py \
-  --project /workspace/prj/data-scientist-career/bike-share-demand-resilience \
+  --project /workspace/prj/personal/data-scientist-career/bike-share-demand-resilience \
   --stage sunday
 ```
 
 DecisionOps suite 상태 확인:
 
 ```bash
-cd /workspace/prj/data-scientist-career
+cd /workspace/prj/personal/data-scientist-career
 scripts/verify_decisionops_suite.py
 cat /DATA/HJ/prj/data-scientist-career/state/decisionops_suite_status.md
 ```

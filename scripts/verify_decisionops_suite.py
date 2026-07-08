@@ -16,7 +16,7 @@ from typing import Any
 from zoneinfo import ZoneInfo
 
 
-DEFAULT_REGISTRY = Path("/workspace/prj/data-scientist-career/registry/projects.json")
+DEFAULT_REGISTRY = Path("/workspace/prj/personal/data-scientist-career/registry/projects.json")
 DEFAULT_STATE_DIR = Path("/DATA/HJ/prj/data-scientist-career/state")
 DEFAULT_STATUS_JSON = DEFAULT_STATE_DIR / "decisionops_suite_status.json"
 DEFAULT_STATUS_MD = DEFAULT_STATE_DIR / "decisionops_suite_status.md"

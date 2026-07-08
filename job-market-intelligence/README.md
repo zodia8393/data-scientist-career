@@ -43,7 +43,7 @@
 ## 설치
 
 ```bash
-cd /workspace/prj/data-scientist-career/job-market-intelligence
+cd /workspace/prj/personal/data-scientist-career/job-market-intelligence
 python3 -m venv .venv
 . .venv/bin/activate
 pip install -r requirements.txt

@@ -11,8 +11,8 @@
 - Active quality score floor는 `92.0`에서 시작한다.
 - quality score는 전 항목이 active floor를 초과해야 완료 처리한다. floor와 같은 점수면 한 번 더 고도화하고 재측정한다.
 - 재측정 결과의 최소 점수가 active floor보다 높으면 그 점수가 새 floor가 된다. 예: `92.0`에서 최소 `94.0`을 달성하면 이후 floor는 `94.0`.
-- 이 상향은 postcheck에서 `/workspace/prj/data-scientist-career/scripts/update_quality_floor.py`가 자동 적용한다.
-- floor를 넘지 못하면 postcheck에서 `/workspace/prj/data-scientist-career/scripts/update_quality_gap_report.py`가 `docs/research_gap_report.md`의 `Quality Ratchet Gap` 자동 섹션을 갱신한다.
+- 이 상향은 postcheck에서 `/workspace/prj/personal/data-scientist-career/scripts/update_quality_floor.py`가 자동 적용한다.
+- floor를 넘지 못하면 postcheck에서 `/workspace/prj/personal/data-scientist-career/scripts/update_quality_gap_report.py`가 `docs/research_gap_report.md`의 `Quality Ratchet Gap` 자동 섹션을 갱신한다.
 - README/presentation 항목은 최소 `max(94.0, active floor)` 이상이어야 한다.
 - `100`점은 존재하지 않는다. 모든 점수는 `0 <= score < 100`이며, `99` 이상은 소수점 단위로 기록한다.
 - GitHub `README.md`는 결론-first로 작성하고, 최소 `결론`, `무엇을 만들었나`, `핵심 수치`와 `의미` 열, `얻은 인사이트`, `방법 선택 이유`, `대표 시각화`, `현재 상태`, `실행 방법`, `산출물 확인 방법`, `한계`를 포함한다.
@@ -45,8 +45,8 @@
 검증:
 
 ```bash
-python3 /workspace/prj/data-scientist-career/scripts/validate_weekend_project.py \
-  --project /workspace/prj/data-scientist-career/<slug> \
+python3 /workspace/prj/personal/data-scientist-career/scripts/validate_weekend_project.py \
+  --project /workspace/prj/personal/data-scientist-career/<slug> \
   --stage saturday
 ```
 
@@ -73,8 +73,8 @@ python3 /workspace/prj/data-scientist-career/scripts/validate_weekend_project.py
 검증:
 
 ```bash
-python3 /workspace/prj/data-scientist-career/scripts/validate_weekend_project.py \
-  --project /workspace/prj/data-scientist-career/<slug> \
+python3 /workspace/prj/personal/data-scientist-career/scripts/validate_weekend_project.py \
+  --project /workspace/prj/personal/data-scientist-career/<slug> \
   --stage sunday
 ```
 
@@ -101,14 +101,14 @@ python3 /workspace/prj/data-scientist-career/scripts/validate_weekend_project.py
 
 ## 운영 및 보고
 
-- Scheduled runner: `/workspace/_codex/scripts/weekend-ds-codex-run.sh`
-- Schedule prompt: `/workspace/_codex/schedules/weekend-data-scientist-career-project.md`
-- Health helper: `/workspace/_codex/scripts/weekend-ds-codex-health.py`
-- Telegram sender: `/workspace/_codex/scripts/send-telegram-message.py`
+- Scheduled runner: `/workspace/infra/codex/scripts/weekend-ds-codex-run.sh`
+- Schedule prompt: `/workspace/infra/codex/schedules/weekend-data-scientist-career-project.md`
+- Health helper: `/workspace/infra/codex/scripts/weekend-ds-codex-health.py`
+- Telegram sender: `/workspace/infra/codex/scripts/send-telegram-message.py`
 - Durable state: `/DATA/HJ/prj/data-scientist-career/state/weekend-project-state.md`
-- 대표 프로젝트 registry: `/workspace/prj/data-scientist-career/registry/projects.json`
-- Notion 메인 포트폴리오 sync: `/workspace/_notion_remodel/scripts/sync_main_portfolio.py`
-- GitHub 자동 업로드 hook: `/workspace/_codex/scripts/auto-push-weekend-ds-project.sh`
+- 대표 프로젝트 registry: `/workspace/prj/personal/data-scientist-career/registry/projects.json`
+- Notion 메인 포트폴리오 sync: `/workspace/infra/notion_remodel/scripts/sync_main_portfolio.py`
+- GitHub 자동 업로드 hook: `/workspace/infra/codex/scripts/auto-push-weekend-ds-project.sh`
 
 실행 스케줄:
 
@@ -140,10 +140,10 @@ python3 /workspace/prj/data-scientist-career/scripts/validate_weekend_project.py
 
 ## 현재 Bike-share 프로젝트 추가 자동화 Gate
 
-`/workspace/prj/data-scientist-career/bike-share-demand-resilience`는 station-level 운영 프로젝트로 고도화되었기 때문에 주말 run 또는 후속 health check에서 아래가 통과해야 한다.
+`/workspace/prj/personal/data-scientist-career/bike-share-demand-resilience`는 station-level 운영 프로젝트로 고도화되었기 때문에 주말 run 또는 후속 health check에서 아래가 통과해야 한다.
 
 ```bash
-cd /workspace/prj/data-scientist-career/bike-share-demand-resilience
+cd /workspace/prj/personal/data-scientist-career/bike-share-demand-resilience
 scripts/run_station_level.sh
 scripts/run_station_snapshot_monitor.sh
 PYTHONPATH=src python3 -m bike_share_resilience.station_service \

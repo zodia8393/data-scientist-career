@@ -95,3 +95,11 @@ def test_decisionops_suite_slug_filter_is_explicit():
         "decisionops-control-tower",
     }
     assert "job-market-intelligence" not in verifier.DECISIONOPS_SUITE_SLUGS
+
+
+def test_registry_keeps_job_market_intelligence_on_career_track():
+    registry = json.loads(verifier.DEFAULT_REGISTRY.read_text(encoding="utf-8"))
+    job_market = next(item for item in registry["projects"] if item["slug"] == "job-market-intelligence")
+
+    assert job_market["portfolio_track"] == "career_transition_tool"
+    assert job_market["decisionops_suite"] is False
