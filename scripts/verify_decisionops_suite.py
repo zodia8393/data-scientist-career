@@ -152,7 +152,12 @@ def check_required_files(project: str, source_path: Path, issues: list[Issue]) -
         add_issue(issues, "error", project, "required_files", ", ".join(missing))
 
 
-def evaluate_bike_share(artifact_path: Path, issues: list[Issue]) -> dict[str, Any]:
+def evaluate_bike_share(
+    artifact_path: Path,
+    issues: list[Issue],
+    *,
+    current_time: datetime | None = None,
+) -> dict[str, Any]:
     station_readiness = read_json(artifact_path / "station_level/reports/station_snapshot_readiness.json")
     public_readiness = read_json(artifact_path / "station_level/reports/station_public_deploy_readiness.json")
     seoul_validation = read_json(artifact_path / "seoul_ddareungi/reports/validation_summary.json")
@@ -163,7 +168,17 @@ def evaluate_bike_share(artifact_path: Path, issues: list[Issue]) -> dict[str, A
     if not station_ready:
         station_count = int(station_readiness.get("snapshot_count", 0))
         min_required = int(station_readiness.get("min_required_snapshots", 268))
-        severity = "error" if station_count >= min_required else "pending"
+        before_earliest = False
+        earliest_raw = station_readiness.get("earliest_ready_at")
+        if station_count >= min_required and earliest_raw:
+            earliest_ready_at = datetime.fromisoformat(str(earliest_raw))
+            if earliest_ready_at.tzinfo is None:
+                earliest_ready_at = earliest_ready_at.replace(tzinfo=KST)
+            evaluated_at = current_time or datetime.now(KST)
+            if evaluated_at.tzinfo is None:
+                evaluated_at = evaluated_at.replace(tzinfo=KST)
+            before_earliest = evaluated_at < earliest_ready_at
+        severity = "pending" if station_count < min_required or before_earliest else "error"
         add_issue(
             issues,
             severity,
