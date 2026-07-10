@@ -170,26 +170,41 @@ def evaluate_bike_share(
         min_required = int(station_readiness.get("min_required_snapshots", 268))
         before_earliest = False
         earliest_raw = station_readiness.get("earliest_ready_at")
-        if station_count >= min_required and earliest_raw:
-            earliest_ready_at = datetime.fromisoformat(str(earliest_raw))
-            if earliest_ready_at.tzinfo is None:
-                earliest_ready_at = earliest_ready_at.replace(tzinfo=KST)
-            evaluated_at = current_time or datetime.now(KST)
-            if evaluated_at.tzinfo is None:
-                evaluated_at = evaluated_at.replace(tzinfo=KST)
-            before_earliest = evaluated_at < earliest_ready_at
-        severity = "pending" if station_count < min_required or before_earliest else "error"
-        add_issue(
-            issues,
-            severity,
-            "bike-share-demand-resilience",
-            "station_prospective_readiness",
-            (
-                f"{station_readiness.get('snapshot_count')}/"
-                f"{station_readiness.get('min_required_snapshots')} minimum snapshots; "
-                f"earliest_ready_at={station_readiness.get('earliest_ready_at')}"
-            ),
-        )
+        timestamp_valid = True
+        earliest_ready_at: datetime | None = None
+        if earliest_raw:
+            try:
+                earliest_ready_at = datetime.fromisoformat(str(earliest_raw))
+            except (TypeError, ValueError):
+                timestamp_valid = False
+                add_issue(
+                    issues,
+                    "error",
+                    "bike-share-demand-resilience",
+                    "station_earliest_ready_at",
+                    f"invalid ISO-8601 timestamp: {earliest_raw!r}",
+                )
+
+        if timestamp_valid:
+            if station_count >= min_required and earliest_ready_at is not None:
+                if earliest_ready_at.tzinfo is None:
+                    earliest_ready_at = earliest_ready_at.replace(tzinfo=KST)
+                evaluated_at = current_time or datetime.now(KST)
+                if evaluated_at.tzinfo is None:
+                    evaluated_at = evaluated_at.replace(tzinfo=KST)
+                before_earliest = evaluated_at < earliest_ready_at
+            severity = "pending" if station_count < min_required or before_earliest else "error"
+            add_issue(
+                issues,
+                severity,
+                "bike-share-demand-resilience",
+                "station_prospective_readiness",
+                (
+                    f"{station_readiness.get('snapshot_count')}/"
+                    f"{station_readiness.get('min_required_snapshots')} minimum snapshots; "
+                    f"earliest_ready_at={station_readiness.get('earliest_ready_at')}"
+                ),
+            )
 
     seoul_snapshot_count = int(seoul_validation.get("snapshot_count", 0))
     seoul_min = int(seoul_validation.get("min_snapshots_for_validation", 24))

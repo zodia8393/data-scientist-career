@@ -5,9 +5,6 @@ import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 
-import pytest
-
-
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "verify_decisionops_suite.py"
 SPEC = importlib.util.spec_from_file_location("verify_decisionops_suite", SCRIPT)
 verifier = importlib.util.module_from_spec(SPEC)
@@ -103,12 +100,17 @@ def test_station_readiness_keeps_count_only_error_without_earliest_time(tmp_path
     assert issue.severity == "error"
 
 
-def test_station_readiness_rejects_malformed_earliest_time(tmp_path):
+def test_station_readiness_reports_malformed_earliest_time_without_losing_details(tmp_path):
     now = datetime.fromisoformat("2026-07-10T18:00:00+09:00")
     write_bike_share_artifacts(tmp_path, earliest_ready_at="not-a-timestamp")
+    issues: list[verifier.Issue] = []
 
-    with pytest.raises(ValueError, match="Invalid isoformat"):
-        verifier.evaluate_bike_share(tmp_path, [], current_time=now)
+    details = verifier.evaluate_bike_share(tmp_path, issues, current_time=now)
+
+    timestamp_issue = next(issue for issue in issues if issue.check == "station_earliest_ready_at")
+    assert timestamp_issue.severity == "error"
+    assert "not-a-timestamp" in timestamp_issue.detail
+    assert details["station_snapshot_count"] == 268
 
 
 def test_markdown_status_marks_expected_pending_without_warning():
