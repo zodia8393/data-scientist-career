@@ -77,3 +77,10 @@
 - Docker/Compose smoke는 사용자 실행 완료와 post-cleanup 감사로 `PASS` 처리했다. 기존 service는 loopback bind와 healthy 상태를 유지한다.
 - Write auth credential은 미설정이므로 hosted/private와 public endpoint는 `NO_GO`를 유지한다. Credential 제공 전에는 추가 실행이 필수가 아니며, 설정 후 `verify_private_demo.py`와 `write_deployment_readiness.py --require-auth --require-docker`를 재실행한다.
 - Commit, push, external deploy, 원본 데이터 변경은 수행하지 않았다.
+
+## 2026-07-16 GitHub publication 후속 기록
+
+- Root, Workbench, Bike, Control 변경을 각각 독립 `agent/*` branch로 commit하고 origin에 push했다.
+- Draft PR은 [Root #1](https://github.com/zodia8393/data-scientist-career/pull/1), [Workbench #1](https://github.com/zodia8393/agentic-decisionops-workbench/pull/1), [Bike #1](https://github.com/zodia8393/bike-share-demand-resilience/pull/1), [Control #1](https://github.com/zodia8393/decisionops-control-tower/pull/1)이다.
+- 네 PR 모두 GitHub Actions가 통과했고 `MERGEABLE/CLEAN` 상태를 확인했다.
+- Default `main`에는 아직 merge하지 않았으며, external deploy와 credential 변경도 수행하지 않았다.
