@@ -6,7 +6,7 @@
 bash scripts/run_all.sh
 ```
 
-`OUTPUT_ROOT`를 지정하면 raw data, SQLite, report와 JUnit을 해당 artifact root에 생성한다. 기본 실행은 workspace 밖의 프로젝트 artifact root를 사용한다.
+`OUTPUT_ROOT`를 지정하면 raw data, SQLite, report와 JUnit을 해당 artifact root에 생성한다. 기본 실행은 쓰기 가능한 local `/DATA/HJ` artifact root를 사용하고, GitHub runner처럼 해당 경로가 없으면 `RUNNER_TEMP` 또는 `TMPDIR`로 fallback한다.
 
 ## Test
 
