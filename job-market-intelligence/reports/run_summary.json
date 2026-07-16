@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "generated_at_utc": "2026-07-16T03:06:51.425227+00:00",
+  "status": "pass",
+  "counts": {
+    "raw_latest_items": 6,
+    "normalized_jobs": 4,
+    "scored_jobs": 4
+  },
+  "quality_gate_passed": true,
+  "reports": {
+    "markdown": "reports/job_market_report.md",
+    "html": "reports/job_market_report.html",
+    "final_report": "reports/final_report.md",
+    "model_card": "reports/model_card.md",
+    "data_source_and_contract": "reports/data_source_and_contract.md",
+    "quality_gate": "reports/quality_gate_checks.csv"
+  }
+}

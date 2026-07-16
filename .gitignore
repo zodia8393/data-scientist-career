@@ -12,6 +12,14 @@ __pycache__/
 projects/
 artifacts/
 reports/
+!job-market-intelligence/reports/
+!job-market-intelligence/reports/job_market_report.md
+!job-market-intelligence/reports/job_market_report.html
+!job-market-intelligence/reports/final_report.md
+!job-market-intelligence/reports/model_card.md
+!job-market-intelligence/reports/data_source_and_contract.md
+!job-market-intelligence/reports/run_summary.json
+!job-market-intelligence/reports/quality_gate_checks.csv
 figures/
 models/
 *.sqlite

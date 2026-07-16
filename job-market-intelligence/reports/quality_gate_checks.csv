@@ -1,0 +1,5 @@
+check,passed,detail
+raw_input_present,True,raw_latest_items=6
+normalized_jobs_present,True,normalized_jobs=4
+all_normalized_jobs_scored,True,"scored_jobs=4, normalized_jobs=4"
+score_explanations_complete,True,every scored job has breakdown and evidence-based resume bullets
