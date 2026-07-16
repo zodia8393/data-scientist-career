@@ -13,7 +13,7 @@
 | 프로젝트 | 역할 | 현재 증거 |
 |---|---|---|
 | [Bike-Share Demand Resilience](https://github.com/zodia8393/bike-share-demand-resilience) | Stage 1 · 예측/검증 | frozen 340 snapshots, F1 0.8286, quality 96.0 |
-| [Agentic DecisionOps Workbench](https://github.com/zodia8393/agentic-decisionops-workbench) | Stage 2 · agent/eval/guardrail | main·holdout 1.000, evidence-backed quality 96.0 |
+| [Agentic DecisionOps Workbench](https://github.com/zodia8393/agentic-decisionops-workbench) | Stage 2 · agent/eval/guardrail | main·holdout 1.000, planner replay 0.200→1.000, quality 96.0 |
 | [DecisionOps Control Tower](https://github.com/zodia8393/decisionops-control-tower) | Stage 3 · reviewer product | 12 impact cards, audit `PASS`, evidence-backed quality 96.0 |
 | [Job Market Intelligence](job-market-intelligence) | Career tool · 공고 분석 | fixture 6→5→4, 11 tests, artifact contract `PASS` |
 
@@ -22,7 +22,7 @@
 | Stage | 입력 → 출력 | 안전 경계 |
 |---|---|---|
 | 1 · Bike | 수요·inventory → shortage risk와 재배치 후보 | frozen prospective validation 전에는 `NO_GO` |
-| 2 · Workbench | ML artifact → evidence-cited guarded decision | dispatch·public posting은 refuse/escalate |
+| 2 · Workbench | ML artifact/planner candidate → evidence-cited guarded decision | dispatch·public posting은 refuse/escalate; synthetic replay lift +0.800 |
 | 3 · Control | review queue → approval history와 deployment gate | write auth 없이는 hosted/public `NO_GO` |
 
 `GO`는 하나의 의미가 아닙니다. 현재 upstream evidence는 공개 검토가 가능하지만, 외부 endpoint 배포는 별도 인증 gate를 통과해야 합니다. 이 구분을 suite verifier와 각 README에서 동일하게 유지합니다.
