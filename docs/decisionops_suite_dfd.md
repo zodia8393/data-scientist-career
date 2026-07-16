@@ -131,5 +131,5 @@ flowchart LR
 이 suite는 local 실행과 포트폴리오 검토가 가능하고 upstream evidence/claim gate도 준비된 상태다. 다만 public endpoint deployment는 인증 hardening 전까지 의도적으로 차단한다.
 
 - Stage 1은 cutoff가 고정된 340개 snapshot, 14.01일 cohort로 prospective validation을 통과했다.
-- Stage 2는 평가 가능 상태지만 production mode의 LLM-backed planner는 아직 붙이지 않았다.
+- Stage 2는 synthetic planner replay raw/guarded ablation까지 평가 가능하다. Production mode의 live LLM-backed planner와 실제 provider 성능 평가는 아직 붙이지 않았다.
 - Stage 3는 API, dashboard, approval persistence, monitoring, deployment readiness를 가진 local/container product slice이며, hosted/public endpoint는 write auth 미설정으로 `NO_GO`다.

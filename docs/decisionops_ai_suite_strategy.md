@@ -82,6 +82,7 @@ Required maturity:
 - MCP-style contract for resources, tools, and prompts.
 - Synthetic/public-safe task set.
 - Baseline agent and guarded agent comparison.
+- Provider-neutral planner replay contract with prompt-hash drift detection and raw/guarded ablation.
 - Guardrails for deployment `NO_GO`, high uncertainty, missing evidence, unsafe writes, and unsupported requests.
 - Human-review escalation.
 - Trace records for tool calls, evidence, guardrail hits, retries, and final decisions.
@@ -167,6 +168,6 @@ The suite is acceptable only when:
 1. Keep `bike-share-demand-resilience` in monitoring mode until current station snapshot readiness unblocks.
 2. Add the Seoul Ddareungi adapter path: real-time station snapshot collector, trip-history station-hour aggregation, and shortage/overflow labels.
 3. Add the Decision Impact Simulator: baseline policy vs model policy, limited rebalancing budget, expected shortage/overflow reduction, false-alarm cost.
-4. Keep `agentic-decisionops-workbench` as the evaluated Stage 2 bridge and make it impact-aware before adding an LLM-backed planner.
+4. Keep `agentic-decisionops-workbench` as the evaluated Stage 2 bridge. The synthetic replay harness is complete; use provider-recorded LLM output only after model, cost, sampling, and public-safe provenance are fixed.
 5. Use `decisionops-control-tower` as the Stage 3 local product slice and add impact cards before UI polish or hosted demo hardening.
 6. Keep public deploy `NO_GO` until upstream readiness, prospective validation, and production hardening are complete.
