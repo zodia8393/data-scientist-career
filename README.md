@@ -6,7 +6,7 @@
 
 예측 모델을 만드는 데서 끝내지 않고, **검증 가능한 evidence → guarded decision → human approval**로 이어지는 운영형 Data Science 포트폴리오입니다.
 
-> **Release snapshot · 2026-07-16** — Upstream evidence/claim `GO` · Workbench `public_ready` · Hosted recorded demo `GO` · Live write API `NO_GO` (인증 필요)
+> **Release snapshot · 2026-07-16** — Upstream evidence/claim `GO` · Stage 2/3 public read-only demo `GO` · Authenticated approval E2E `PASS` · Hosted write API `NO_GO` (target secret 필요)
 
 ## 30초 요약
 
@@ -15,7 +15,10 @@
       Stage 1                       Stage 2                       Stage 3
 ```
 
-가장 빠른 체험은 **[DecisionOps Guardrail Demo](https://zodia8393.github.io/agentic-decisionops-workbench/)**입니다. “현장팀을 지금 보내라”는 AI 제안이 evidence 확인 후 `REFUSE`와 Human review로 바뀌는 과정을 클릭해 볼 수 있습니다.
+가장 빠른 체험은 두 브라우저 데모입니다.
+
+- **[Guardrail Demo](https://zodia8393.github.io/agentic-decisionops-workbench/)**: 위험한 AI 제안이 evidence 확인 후 `REFUSE`와 Human review로 바뀌는 과정
+- **[Control Tower Demo](https://zodia8393.github.io/decisionops-control-tower/)**: 따릉이 후보 지도부터 검토 순위, 근거 패킷, 감사 이력까지 이어지는 read-only 운영 화면
 
 ## 한눈에 보기
 
@@ -32,7 +35,7 @@
 |---|---|---|
 | 1 · Bike | 수요·inventory → shortage risk와 재배치 후보 | frozen prospective validation 전에는 `NO_GO` |
 | 2 · Workbench | ML artifact/planner candidate → evidence-cited guarded decision | dispatch·public posting은 refuse/escalate; synthetic replay lift +0.800 |
-| 3 · Control | review queue → approval history와 deployment gate | write auth 없이는 hosted/public `NO_GO` |
+| 3 · Control | review queue → approval history와 deployment gate | 공개 화면은 read-only; hosted write는 strong role credential 없으면 startup 차단 |
 
 `GO`는 하나의 의미가 아닙니다. 현재 upstream evidence는 공개 검토가 가능하지만, 외부 endpoint 배포는 별도 인증 gate를 통과해야 합니다. 이 구분을 suite verifier와 각 README에서 동일하게 유지합니다.
 
@@ -40,7 +43,7 @@
 
 1. [Bike 핵심 수치](https://github.com/zodia8393/bike-share-demand-resilience#핵심-수치)에서 모델·cohort·drift 근거를 확인합니다.
 2. [Workbench demo](https://github.com/zodia8393/agentic-decisionops-workbench#직접-체험)에서 자동 실행을 막는 guardrail을 직접 확인합니다.
-3. [Control dashboard](https://github.com/zodia8393/decisionops-control-tower#대표-시각화)에서 reviewer workflow와 audit trail을 확인합니다.
+3. [Control Tower demo](https://zodia8393.github.io/decisionops-control-tower/)에서 reviewer workflow와 audit trail을 확인합니다.
 4. [Job Market Intelligence](job-market-intelligence#핵심-수치)에서 포트폴리오와 실제 지원 우선순위의 연결을 봅니다.
 
 ## 빠른 검증
