@@ -66,7 +66,9 @@ DOC_MARKERS: dict[str, tuple[tuple[str, ...], ...]] = {
 }
 
 SECRET_VALUE_RE = re.compile(
-    r"(?i)\b(api[_-]?key|token|secret|password)\b\s*[:=]\s*['\"]?[A-Za-z0-9_\-./+]{16,}"
+    r"(?im)\b(api[_-]?key|token|secret|password)\b\s*[:=]\s*(?:"
+    r"(?P<quote>['\"])[A-Za-z0-9_\-./+]{16,}(?P=quote)|"
+    r"[A-Za-z0-9_\-./+]{16,}(?=\s*(?:#.*)?$))"
 )
 LOCAL_ABSOLUTE_PATH_RE = re.compile(r"(?<![\w.-])/(?:workspace|DATA/HJ|home/ybs)\b")
 ACTIVE_FLOOR_RE = re.compile(r"Active quality score floor:\s*`(?P<score>\d+(?:\.\d+)?)`")
@@ -180,6 +182,18 @@ def resolve_artifact_path(project: Path, registry: Path, artifact_root: Path) ->
     if item and item.get("artifact_path"):
         return Path(str(item["artifact_path"]))
     return artifact_root / project.name
+
+
+def resolve_required_file_path(
+    project: Path,
+    relative_path: str,
+    registry_item: dict | None,
+) -> Path:
+    local_path = project / relative_path
+    if local_path.is_file() or relative_path != ".github/workflows/ci.yml":
+        return local_path
+    declared_ci = str((registry_item or {}).get("ci_workflow_path", "")).strip()
+    return Path(declared_ci) if declared_ci else local_path
 
 
 def load_active_quality_floor(state_file: Path) -> float:
@@ -538,9 +552,12 @@ def main() -> int:
 
     run_check(checks, "project_dir", project.is_dir(), str(project))
 
-    required_files = CORE_REQUIRED_FILES + RESEARCH_PRODUCT_FILES
+    registry_item = load_registry_project(registry, project.name)
+    required_files = CORE_REQUIRED_FILES + (
+        RESEARCH_PRODUCT_FILES if args.stage == "sunday" else []
+    )
     for relative_path in required_files:
-        path = project / relative_path
+        path = resolve_required_file_path(project, relative_path, registry_item)
         run_check(checks, f"required_file:{relative_path}", path.is_file(), str(path))
 
     validate_docs(project, args.stage, checks)

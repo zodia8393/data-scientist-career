@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import csv
 import html
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -23,7 +24,127 @@ def write_report(
     html_path = reports_dir / "job_market_report.html"
     md_path.write_text(markdown, encoding="utf-8")
     html_path.write_text(render_html(markdown), encoding="utf-8")
+    write_artifact_contract(reports_dir, scored_records, counts)
     return md_path, html_path
+
+
+def write_artifact_contract(
+    reports_dir: Path,
+    scored_records: list[dict[str, Any]],
+    counts: dict[str, int],
+) -> dict[str, Path]:
+    normalized_jobs = int(counts.get("normalized_jobs", 0))
+    scored_jobs = int(counts.get("scored_jobs", 0))
+    raw_items = int(counts.get("raw_latest_items", 0))
+    score_explanations_complete = bool(scored_records) and all(
+        row.get("score_breakdown") and row.get("resume_bullets") for row in scored_records
+    )
+    checks = [
+        {"check": "raw_input_present", "passed": raw_items > 0, "detail": f"raw_latest_items={raw_items}"},
+        {
+            "check": "normalized_jobs_present",
+            "passed": normalized_jobs > 0,
+            "detail": f"normalized_jobs={normalized_jobs}",
+        },
+        {
+            "check": "all_normalized_jobs_scored",
+            "passed": scored_jobs == normalized_jobs and scored_jobs > 0,
+            "detail": f"scored_jobs={scored_jobs}, normalized_jobs={normalized_jobs}",
+        },
+        {
+            "check": "score_explanations_complete",
+            "passed": score_explanations_complete,
+            "detail": "every scored job has breakdown and evidence-based resume bullets",
+        },
+    ]
+    quality_path = reports_dir / "quality_gate_checks.csv"
+    with quality_path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=["check", "passed", "detail"],
+            lineterminator="\n",
+        )
+        writer.writeheader()
+        writer.writerows(checks)
+
+    generated_at = datetime.now(timezone.utc).isoformat()
+    final_report = reports_dir / "final_report.md"
+    final_report.write_text(
+        "\n".join(
+            [
+                "# Job Market Intelligence Final Report",
+                "",
+                "## 결론",
+                "",
+                f"공식 API boundary와 fixture fallback 아래 raw {raw_items}건을 정규화·중복 제거해 {normalized_jobs}건을 만들고, {scored_jobs}건 모두에 설명 가능한 지원 우선순위를 부여했다.",
+                "",
+                "## 운영 판단",
+                "",
+                "현재 fixture 결과는 pipeline 재현 근거이며 실제 채용시장 통계가 아니다. 실제 지원 판단에는 공식 API로 다시 수집한 결과와 개인 application outcome을 함께 사용해야 한다.",
+                "",
+                "## Artifact contract",
+                "",
+                "- `job_market_report.md`와 `job_market_report.html`: 평가자용 결과",
+                "- `run_summary.json`: machine-readable 실행 요약",
+                "- `quality_gate_checks.csv`: 관측 가능한 pipeline gate",
+                "- `model_card.md`: rule-based ranking의 사용 범위와 한계",
+                "- `data_source_and_contract.md`: source·privacy·출력 경계",
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    model_card = reports_dir / "model_card.md"
+    model_card.write_text(
+        "# Job Fit Ranking System Card\n\n"
+        "Rule-based fit score는 role, skill, domain, experience, location, profile evidence와 risk penalty를 결합한다. "
+        "지원 순서를 설명 가능하게 정렬하는 decision-support 도구이며 채용 가능성 예측이나 자동 지원 권한이 아니다.\n",
+        encoding="utf-8",
+    )
+    data_contract = reports_dir / "data_source_and_contract.md"
+    data_contract.write_text(
+        "# Data Source and Contract\n\n"
+        "- 입력은 공식 provider API 또는 repository fixture로 제한한다.\n"
+        "- 무단 scraping, 개인 식별정보 수집, credential 출력은 허용하지 않는다.\n"
+        "- raw response는 원형을 보존하고 normalized/scored table은 재생성 가능하게 유지한다.\n"
+        "- fixture 결과는 재현성 검증용이며 시장 통계로 해석하지 않는다.\n",
+        encoding="utf-8",
+    )
+    run_summary = reports_dir / "run_summary.json"
+    run_summary.write_text(
+        json.dumps(
+            {
+                "schema_version": "1.0",
+                "generated_at_utc": generated_at,
+                "status": "pass" if all(row["passed"] for row in checks) else "fail",
+                "counts": {
+                    "raw_latest_items": raw_items,
+                    "normalized_jobs": normalized_jobs,
+                    "scored_jobs": scored_jobs,
+                },
+                "quality_gate_passed": all(row["passed"] for row in checks),
+                "reports": {
+                    "markdown": "reports/job_market_report.md",
+                    "html": "reports/job_market_report.html",
+                    "final_report": "reports/final_report.md",
+                    "model_card": "reports/model_card.md",
+                    "data_source_and_contract": "reports/data_source_and_contract.md",
+                    "quality_gate": "reports/quality_gate_checks.csv",
+                },
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    return {
+        "final_report": final_report,
+        "model_card": model_card,
+        "data_source_and_contract": data_contract,
+        "run_summary": run_summary,
+        "quality_gate": quality_path,
+    }
 
 
 def render_markdown_report(

@@ -42,6 +42,17 @@ def test_demo_command_runs_end_to_end(tmp_path):
     assert counts["scored_jobs"] == 4
     assert (tmp_path / "reports" / "job_market_report.md").is_file()
     assert (tmp_path / "reports" / "job_market_report.html").is_file()
+    assert (tmp_path / "reports" / "final_report.md").is_file()
+    assert (tmp_path / "reports" / "model_card.md").is_file()
+    assert (tmp_path / "reports" / "data_source_and_contract.md").is_file()
+    summary = json.loads((tmp_path / "reports" / "run_summary.json").read_text(encoding="utf-8"))
+    assert summary["status"] == "pass"
+    assert summary["counts"] == {
+        "raw_latest_items": 6,
+        "normalized_jobs": 4,
+        "scored_jobs": 4,
+    }
+    assert summary["quality_gate_passed"] is True
 
 
 def test_normalize_filters_non_target_and_dedupes():

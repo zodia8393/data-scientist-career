@@ -127,11 +127,11 @@
       "portfolio_track": "decisionops_suite",
       "decisionops_suite": true,
       "source_path": "/workspace/prj/personal/data-scientist-career/agentic-decisionops-workbench",
-      "remote_url": "git@github.com:zodia8393/data-scientist-career.git",
-      "github_url": "https://github.com/zodia8393/data-scientist-career",
+      "remote_url": "git@github.com:zodia8393/agentic-decisionops-workbench.git",
+      "github_url": "https://github.com/zodia8393/agentic-decisionops-workbench",
       "artifact_path": "/DATA/HJ/prj/data-scientist-career/projects/agentic-decisionops-workbench",
       "last_reviewed": "2026-07-16",
-      "quality_gate_min_score": 94.9,
+      "quality_gate_min_score": 96,
       "best_model": "guarded_decision_agent",
       "primary_metrics": {
         "main_task_success_rate": 1.0,
@@ -145,14 +145,17 @@
         "ny_511_event_sample_rows": 120,
         "impact_candidate_units_addressed": 885,
         "impact_public_claim_state": "ready_for_claim",
-        "impact_public_claim_blocked_cards": 0
+        "impact_public_claim_blocked_cards": 0,
+        "verified_test_count": 19,
+        "quality_evidence_ready": true
       },
       "required_next_action": "Use this as the Stage 2 API bridge and add an LLM-backed planner ablation through /v1/decisions. Keep the deterministic blocked and ready_for_claim fixtures as regression coverage while hosted deployment is hardened separately.",
       "known_risks": [
         "NY 511 sample is historical open data and not a live dispatch authority.",
         "LLM-backed planner is not embedded yet; external planners can call the guarded API boundary, but ablation against real LLM outputs is still a next step.",
         "Hosted demo remains optional hardening after Control Tower.",
-        "Seoul impact cards are eligible for evidence-based public claims, but candidate units are modeled decision-support estimates rather than realized causal impact."
+        "Seoul impact cards are eligible for evidence-based public claims, but candidate units are modeled decision-support estimates rather than realized causal impact.",
+        "The 96.0 quality floor requires fresh passing JUnit plus complete guardrail, prepublish, artifact, and presentation evidence; missing evidence falls back to the conservative baseline scores."
       ],
       "key_artifacts": {
         "readme": "/workspace/prj/personal/data-scientist-career/agentic-decisionops-workbench/README.md",
@@ -166,6 +169,7 @@
         "prepublish_audit": "/DATA/HJ/prj/data-scientist-career/projects/agentic-decisionops-workbench/reports/prepublish_audit.json",
         "trace_report": "/DATA/HJ/prj/data-scientist-career/projects/agentic-decisionops-workbench/reports/trace_report.html",
         "review_queue": "/DATA/HJ/prj/data-scientist-career/projects/agentic-decisionops-workbench/reports/human_review_queue.csv",
+        "quality_evidence": "/DATA/HJ/prj/data-scientist-career/projects/agentic-decisionops-workbench/reports/quality_evidence.json",
         "run_script": "/workspace/prj/personal/data-scientist-career/agentic-decisionops-workbench/scripts/run_all.sh"
       }
     },
@@ -180,7 +184,7 @@
       "github_url": "https://github.com/zodia8393/decisionops-control-tower",
       "artifact_path": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower",
       "last_reviewed": "2026-07-16",
-      "quality_gate_min_score": 95.8,
+      "quality_gate_min_score": 96,
       "best_model": "control_state_rules_fastapi_sqlite",
       "primary_metrics": {
         "demo_mode_ready": true,
@@ -198,7 +202,8 @@
         "structured_logs": true,
         "monitoring_snapshot": true,
         "deployment_readiness_gate": true,
-        "verified_test_count": 31,
+        "verified_test_count": 32,
+        "quality_evidence_ready": true,
         "docker_compose_preflight": true,
         "docker_smoke": true,
         "docker_smoke_status": "passed_user_reported_post_cleanup_verified",
@@ -276,6 +281,7 @@
         "monitoring_history": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/ops_metrics_history.jsonl",
         "deployment_readiness_json": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/deployment_readiness.json",
         "deployment_readiness_report": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/deployment_readiness.md",
+        "quality_evidence": "/DATA/HJ/prj/data-scientist-career/projects/decisionops-control-tower/reports/quality_evidence.json",
         "dockerfile": "/workspace/prj/personal/data-scientist-career/decisionops-control-tower/Dockerfile",
         "compose": "/workspace/prj/personal/data-scientist-career/decisionops-control-tower/compose.yaml",
         "docker_smoke_script": "/workspace/prj/personal/data-scientist-career/decisionops-control-tower/scripts/verify_docker_deployment.sh",
@@ -291,8 +297,9 @@
       "source_path": "/workspace/prj/personal/data-scientist-career/job-market-intelligence",
       "remote_url": "git@github.com:zodia8393/data-scientist-career.git",
       "github_url": "https://github.com/zodia8393/data-scientist-career",
-      "artifact_path": "/workspace/prj/personal/data-scientist-career/job-market-intelligence/reports",
-      "last_reviewed": "2026-07-03",
+      "artifact_path": "/DATA/HJ/prj/data-scientist-career/projects/job-market-intelligence",
+      "ci_workflow_path": "/workspace/prj/personal/data-scientist-career/.github/workflows/job-market-intelligence-ci.yml",
+      "last_reviewed": "2026-07-16",
       "quality_gate_min_score": 90,
       "best_model": "rule_based_fit_score",
       "primary_metrics": {
@@ -316,6 +323,8 @@
         "portfolio_story": "/workspace/prj/personal/data-scientist-career/job-market-intelligence/docs/portfolio_story.md",
         "sample_fixture": "/workspace/prj/personal/data-scientist-career/job-market-intelligence/data/fixtures/sample_jobs.json",
         "demo_report": "/workspace/prj/personal/data-scientist-career/job-market-intelligence/reports/job_market_report.md",
+        "run_summary": "/DATA/HJ/prj/data-scientist-career/projects/job-market-intelligence/reports/run_summary.json",
+        "quality_gate": "/DATA/HJ/prj/data-scientist-career/projects/job-market-intelligence/reports/quality_gate_checks.csv",
         "run_script": "/workspace/prj/personal/data-scientist-career/job-market-intelligence/scripts/run_all.sh"
       }
     }

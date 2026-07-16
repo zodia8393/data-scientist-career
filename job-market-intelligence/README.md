@@ -64,6 +64,8 @@ explainable fit score → skill gap → resume bullet draft → next action
 |---|---|
 | [Markdown report](reports/job_market_report.md) | 시장 요약, 추천 공고, skill gap, 다음 action |
 | [HTML report](reports/job_market_report.html) | 평가자가 바로 열어볼 수 있는 static presentation |
+| [Run summary](reports/run_summary.json) | row count와 machine-readable artifact contract |
+| [Quality checks](reports/quality_gate_checks.csv) | 설명 가능성·row completeness pass/fail gate |
 | [Portfolio story](docs/portfolio_story.md) | 문제 정의부터 career decision으로 이어지는 설명 |
 | [API source notes](docs/api_sources.md) | provider별 공식 문서와 인증·scraping 경계 |
 
@@ -119,6 +121,9 @@ cp profile.example.yaml profile.yaml
 | SQLite store | `data/job_market.sqlite` |
 | Markdown report | `reports/job_market_report.md` |
 | HTML report | `reports/job_market_report.html` |
+| 표준 실행 요약 | `reports/run_summary.json` |
+| Artifact quality gate | `reports/quality_gate_checks.csv` |
+| System/data contract | `reports/model_card.md`, `reports/data_source_and_contract.md` |
 | API source notes | `docs/api_sources.md` |
 | Portfolio story | `docs/portfolio_story.md` |
 

@@ -13,9 +13,9 @@
 | 프로젝트 | 역할 | 현재 증거 |
 |---|---|---|
 | [Bike-Share Demand Resilience](https://github.com/zodia8393/bike-share-demand-resilience) | Stage 1 · 예측/검증 | frozen 340 snapshots, F1 0.8286, quality 96.0 |
-| [Agentic DecisionOps Workbench](https://github.com/zodia8393/agentic-decisionops-workbench) | Stage 2 · agent/eval/guardrail | main·holdout success 1.000, invalid action 0.000 |
-| [DecisionOps Control Tower](https://github.com/zodia8393/decisionops-control-tower) | Stage 3 · reviewer product | 12 impact cards, audit integrity `PASS`, container `GO` |
-| [Job Market Intelligence](job-market-intelligence) | Career tool · 공고 분석 | fixture 6→5→4, explainable fit score, 11 tests |
+| [Agentic DecisionOps Workbench](https://github.com/zodia8393/agentic-decisionops-workbench) | Stage 2 · agent/eval/guardrail | main·holdout 1.000, evidence-backed quality 96.0 |
+| [DecisionOps Control Tower](https://github.com/zodia8393/decisionops-control-tower) | Stage 3 · reviewer product | 12 impact cards, audit `PASS`, evidence-backed quality 96.0 |
+| [Job Market Intelligence](job-market-intelligence) | Career tool · 공고 분석 | fixture 6→5→4, 11 tests, artifact contract `PASS` |
 
 ## DecisionOps Suite
 
@@ -41,7 +41,7 @@ python3 -m pytest -q
 python3 scripts/verify_decisionops_suite.py
 ```
 
-최신 registry는 [registry/projects.json](registry/projects.json), suite 구조는 [docs/decisionops_suite_dfd.md](docs/decisionops_suite_dfd.md), 전체 완료 기록은 [docs/progress/decisionops-readiness-sync-20260715.md](docs/progress/decisionops-readiness-sync-20260715.md)에 있습니다.
+최신 registry는 [registry/projects.json](registry/projects.json), suite 구조는 [docs/decisionops_suite_dfd.md](docs/decisionops_suite_dfd.md), 최신 gate 기록은 [docs/progress/portfolio-gate-contracts-20260716.md](docs/progress/portfolio-gate-contracts-20260716.md)에 있습니다.
 
 <details>
 <summary><strong>Portfolio automation과 scaffold</strong></summary>
