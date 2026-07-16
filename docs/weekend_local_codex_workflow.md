@@ -12,7 +12,7 @@
 
 ## 운영 원칙
 
-- 소스 repo는 `/workspace/prj/data-scientist-career/<project-slug>`에 둡니다.
+- 소스 repo는 `/workspace/prj/personal/data-scientist-career/<project-slug>`에 둡니다.
 - 데이터, 모델, 큰 그림, 실행 보고서는 `/DATA/HJ/prj/data-scientist-career/projects/<project-slug>`에 둡니다.
 - Git에는 재현 코드, 테스트, 경량 문서, 작은 예시 그림만 둡니다.
 - `/workspace/.env` 값은 출력하지 않습니다. 필요한 경우 환경 변수 이름만 문서화합니다.
@@ -26,7 +26,7 @@
 1. `registry/projects.json`에서 직전 프로젝트 상태와 다음 후보를 확인합니다.
 2. 새 프로젝트를 시작할 경우 scaffold를 dry-run으로 먼저 확인합니다.
    ```bash
-   cd /workspace/prj/data-scientist-career
+   cd /workspace/prj/personal/data-scientist-career
    python3 scripts/scaffold_weekend_project.py \
      --slug example-demand-forecast \
      --title "예시 수요 예측 프로젝트" \
@@ -57,12 +57,12 @@
 6. checklist validator를 실행합니다.
    ```bash
 python3 scripts/validate_weekend_project.py \
-  --project /workspace/prj/data-scientist-career/example-demand-forecast \
+  --project /workspace/prj/personal/data-scientist-career/example-demand-forecast \
   --stage saturday
 ```
 7. 프로젝트별 테스트를 실행합니다.
    ```bash
-   cd /workspace/prj/data-scientist-career/example-demand-forecast
+   cd /workspace/prj/personal/data-scientist-career/example-demand-forecast
    scripts/run_all.sh
    ```
 8. 일요일 hardening 후에는 `--stage sunday` validator를 실행합니다. 결과가 research/product-grade가 되면 `registry/projects.json`에 status, quality gate, 핵심 산출물 경로를 갱신합니다. 미달 항목은 `docs/research_gap_report.md`에 남기고 완료 처리하지 않습니다.
@@ -76,12 +76,12 @@ You are local Codex running in /workspace. Take over the weekend research/produc
 
 Read:
 - /workspace/AGENTS.md
-- /workspace/_codex/CURRENT_STATE_20260610.md
+- /workspace/infra/codex/CURRENT_STATE_20260610.md
 - /workspace/.workspace-map.json
 - /workspace/README.md
-- /workspace/prj/data-scientist-career/docs/weekend_local_codex_workflow.md
-- /workspace/prj/data-scientist-career/docs/weekend_research_portfolio_automation.md
-- /workspace/prj/data-scientist-career/registry/projects.json
+- /workspace/prj/personal/data-scientist-career/docs/weekend_local_codex_workflow.md
+- /workspace/prj/personal/data-scientist-career/docs/weekend_research_portfolio_automation.md
+- /workspace/prj/personal/data-scientist-career/registry/projects.json
 
 Use Korean for user-facing docs/reports. Keep identifiers, commands, model names, metrics, and paths in English.
 Keep generated data/artifacts under /DATA/HJ/prj/data-scientist-career/projects/<slug>.

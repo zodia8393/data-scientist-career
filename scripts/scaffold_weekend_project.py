@@ -8,7 +8,7 @@ import re
 from pathlib import Path
 
 
-SOURCE_ROOT = Path("/workspace/prj/data-scientist-career")
+SOURCE_ROOT = Path("/workspace/prj/personal/data-scientist-career")
 ARTIFACT_ROOT = Path("/DATA/HJ/prj/data-scientist-career/projects")
 
 
@@ -378,7 +378,7 @@ data sources -> contracts -> feature pipeline -> baseline/model/benchmark -> eva
 
 ## Runtime
 
-- Source root: `/workspace/prj/data-scientist-career/{slug}`
+- Source root: `/workspace/prj/personal/data-scientist-career/{slug}`
 - Artifact root: `{artifact_path}`
 - Config/env: TODO
 - Logging/error handling: TODO
@@ -472,7 +472,7 @@ data sources -> contracts -> feature pipeline -> baseline/model/benchmark -> eva
 ## 실행
 
 ```bash
-cd /workspace/prj/data-scientist-career/{slug}
+cd /workspace/prj/personal/data-scientist-career/{slug}
 pip install -r requirements.txt
 scripts/run_all.sh
 ```
@@ -480,8 +480,8 @@ scripts/run_all.sh
 ## 검증
 
 ```bash
-python3 /workspace/prj/data-scientist-career/scripts/validate_weekend_project.py \\
-  --project /workspace/prj/data-scientist-career/{slug} \\
+python3 /workspace/prj/personal/data-scientist-career/scripts/validate_weekend_project.py \\
+  --project /workspace/prj/personal/data-scientist-career/{slug} \\
   --stage saturday
 ```
 

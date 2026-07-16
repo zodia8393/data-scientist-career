@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 
-DEFAULT_REGISTRY = Path("/workspace/prj/data-scientist-career/registry/projects.json")
+DEFAULT_REGISTRY = Path("/workspace/prj/personal/data-scientist-career/registry/projects.json")
 DEFAULT_ARTIFACT_ROOT = Path("/DATA/HJ/prj/data-scientist-career/projects")
 DEFAULT_STATE_FILE = Path("/DATA/HJ/prj/data-scientist-career/state/weekend-project-state.md")
 BASE_QUALITY_FLOOR = 92.0

@@ -24,7 +24,7 @@ DecisionOps AI Suite의 최종 포지셔닝은 다음 구조로 확정한다.
 - 공공데이터포털 `서울특별시 공공자전거 실시간 대여정보`: JSON OpenAPI 등록, 업데이트 주기 실시간으로 안내.
   - https://www.data.go.kr/data/15051891/openapi.do
 
-API key와 인증 필요 여부는 Stage 1 문서 `/workspace/prj/data-scientist-career/bike-share-demand-resilience/docs/seoul_ddareungi_api_keys.md`에 둔다.
+API key와 인증 필요 여부는 Stage 1 문서 `/workspace/prj/personal/data-scientist-career/bike-share-demand-resilience/docs/seoul_ddareungi_api_keys.md`에 둔다.
 
 ## 목표 제품
 
