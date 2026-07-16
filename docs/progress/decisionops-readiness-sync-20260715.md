@@ -83,4 +83,5 @@
 - Root, Workbench, Bike, Control 변경을 각각 독립 `agent/*` branch로 commit하고 origin에 push했다.
 - Draft PR은 [Root #1](https://github.com/zodia8393/data-scientist-career/pull/1), [Workbench #1](https://github.com/zodia8393/agentic-decisionops-workbench/pull/1), [Bike #1](https://github.com/zodia8393/bike-share-demand-resilience/pull/1), [Control #1](https://github.com/zodia8393/decisionops-control-tower/pull/1)이다.
 - 네 PR 모두 GitHub Actions가 통과했고 `MERGEABLE/CLEAN` 상태를 확인했다.
-- Default `main`에는 아직 merge하지 않았으며, external deploy와 credential 변경도 수행하지 않았다.
+- Workbench `1d1afe4`, Bike `e28d7b0`, Control `5ce55a8`, Root `6111539` merge commit 순서로 각 default `main`에 반영했고 로컬 `main`도 `origin/main`과 동기화했다.
+- External deploy와 credential 변경은 수행하지 않았다.
