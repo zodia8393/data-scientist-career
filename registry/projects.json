@@ -152,7 +152,9 @@
         "planner_replay_guarded_success_lift": 0.8,
         "planner_replay_recorded_llm_outputs": false,
         "planner_replay_claim_scope": "harness_only",
-        "verified_test_count": 20,
+        "interactive_demo_ready": true,
+        "hosted_recorded_demo_url": "https://zodia8393.github.io/agentic-decisionops-workbench/",
+        "verified_test_count": 21,
         "quality_evidence_ready": true
       },
       "required_next_action": "Replace the synthetic planner fixture with provider-recorded LLM outputs only after model, cost, sampling, and public-safe provenance are fixed. Keep the deterministic main, holdout, replay prompt-hash, blocked, and ready_for_claim contracts as regression coverage.",
@@ -165,6 +167,8 @@
       ],
       "key_artifacts": {
         "readme": "/workspace/prj/personal/data-scientist-career/agentic-decisionops-workbench/README.md",
+        "interactive_demo": "/workspace/prj/personal/data-scientist-career/agentic-decisionops-workbench/docs/demo/index.html",
+        "interactive_demo_preview": "/workspace/prj/personal/data-scientist-career/agentic-decisionops-workbench/docs/assets/demo/guardrail_demo_preview.png",
         "api_app": "/workspace/prj/personal/data-scientist-career/agentic-decisionops-workbench/src/agentic_decisionops_workbench/app.py",
         "api_run_script": "/workspace/prj/personal/data-scientist-career/agentic-decisionops-workbench/scripts/serve_api.sh",
         "api_contract": "/DATA/HJ/prj/data-scientist-career/projects/agentic-decisionops-workbench/reports/mcp_contract.json",
