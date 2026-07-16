@@ -22,6 +22,11 @@ def write_quality(path: Path, rows: list[tuple[str, str]]) -> None:
             writer.writerow({"category": category, "score": score, "rationale": "ok"})
 
 
+def write_json(path: Path, payload: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload), encoding="utf-8")
+
+
 def write_bike_share_artifacts(
     artifact_path: Path,
     *,
@@ -37,6 +42,9 @@ def write_bike_share_artifacts(
             "earliest_ready_at": earliest_ready_at,
         },
         "station_level/reports/station_public_deploy_readiness.json": {"decision": "NO_GO"},
+        "station_level/reports/station_prospective_validation.json": {
+            "validation_status": "NOT_READY"
+        },
         "seoul_ddareungi/reports/validation_summary.json": {
             "validation_status": "READY",
             "snapshot_count": 24,
@@ -184,3 +192,136 @@ def test_registry_keeps_job_market_intelligence_on_career_track():
 
     assert job_market["portfolio_track"] == "career_transition_tool"
     assert job_market["decisionops_suite"] is False
+
+
+def test_control_tower_pending_gate_reports_actual_auth_blocker(tmp_path):
+    write_json(
+        tmp_path / "reports/deployment_readiness.json",
+        {
+            "decisions": {
+                "local_private_demo": "GO",
+                "container_demo": "GO",
+                "hosted_private_demo": "NO_GO",
+                "public_deploy": "NO_GO",
+            },
+            "blockers": {
+                "public_deploy": ["write auth credentials are not configured"]
+            },
+            "control_state": {
+                "demo_mode_ready": True,
+                "public_deploy_decision": "GO",
+            },
+        },
+    )
+    write_json(tmp_path / "reports/run_summary.json", {"metrics": {}})
+    issues: list[verifier.Issue] = []
+
+    details = verifier.evaluate_control_tower(tmp_path, issues)
+
+    pending = next(issue for issue in issues if issue.check == "public_deploy")
+    assert pending.severity == "pending"
+    assert "write auth credentials are not configured" in pending.detail
+    assert details["upstream_public_claim_decision"] == "GO"
+    assert details["public_endpoint_deploy_decision"] == "NO_GO"
+
+
+def test_suite_contracts_detect_stale_workbench_surfaces(tmp_path):
+    bike = tmp_path / "bike"
+    workbench = tmp_path / "workbench"
+    tower = tmp_path / "tower"
+    write_json(
+        bike / "station_level/reports/station_public_deploy_readiness.json",
+        {"decision": "GO"},
+    )
+    write_json(
+        workbench / "data/processed/bike_share_decision_surface.json",
+        {"deployment": {"decision": "NO_GO"}},
+    )
+    write_json(
+        workbench / "data/processed/seoul_impact_decision_surface.json",
+        {"summary": {"public_claim_state": "blocked_until_public_deploy_ready"}},
+    )
+    write_json(
+        workbench / "reports/prepublish_audit.json",
+        {"status": "public_ready"},
+    )
+    write_json(
+        tower / "reports/impact_cards.json",
+        [
+            {
+                "public_claim_state": "allowed",
+                "guardrail_state": "ready_for_review",
+            }
+        ],
+    )
+    write_json(
+        tower / "reports/control_state.json",
+        {
+            "source_status": {
+                "workbench_prepublish_status": "public_ready",
+                "bike_public_deploy_decision": "GO",
+            }
+        },
+    )
+    projects = [
+        {"slug": "bike-share-demand-resilience", "artifact_path": str(bike), "issues": []},
+        {"slug": "agentic-decisionops-workbench", "artifact_path": str(workbench), "issues": []},
+        {"slug": "decisionops-control-tower", "artifact_path": str(tower), "issues": []},
+    ]
+
+    verifier.evaluate_suite_contracts(projects)
+
+    checks = {item["check"] for item in projects[1]["issues"]}
+    assert checks == {
+        "suite_contract:bike_deploy_decision",
+        "suite_contract:impact_public_claim_state",
+    }
+
+
+def test_suite_contracts_accept_matching_state_vocabularies(tmp_path):
+    bike = tmp_path / "bike"
+    workbench = tmp_path / "workbench"
+    tower = tmp_path / "tower"
+    write_json(
+        bike / "station_level/reports/station_public_deploy_readiness.json",
+        {"decision": "GO"},
+    )
+    write_json(
+        workbench / "data/processed/bike_share_decision_surface.json",
+        {"deployment": {"decision": "GO"}},
+    )
+    write_json(
+        workbench / "data/processed/seoul_impact_decision_surface.json",
+        {"summary": {"public_claim_state": "ready_for_claim"}},
+    )
+    write_json(
+        workbench / "reports/prepublish_audit.json",
+        {"status": "public_ready"},
+    )
+    write_json(
+        tower / "reports/impact_cards.json",
+        [
+            {
+                "public_claim_state": "allowed",
+                "guardrail_state": "ready_for_review",
+            }
+        ],
+    )
+    write_json(
+        tower / "reports/control_state.json",
+        {
+            "source_status": {
+                "workbench_prepublish_status": "public_ready",
+                "bike_public_deploy_decision": "GO",
+            }
+        },
+    )
+    projects = [
+        {"slug": "bike-share-demand-resilience", "artifact_path": str(bike), "issues": []},
+        {"slug": "agentic-decisionops-workbench", "artifact_path": str(workbench), "issues": []},
+        {"slug": "decisionops-control-tower", "artifact_path": str(tower), "issues": []},
+    ]
+
+    verifier.evaluate_suite_contracts(projects)
+
+    assert all(not project["issues"] for project in projects)

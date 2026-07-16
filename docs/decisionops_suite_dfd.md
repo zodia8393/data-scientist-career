@@ -124,12 +124,12 @@ flowchart LR
 | Agent action 경계 | Stage 2 도구는 read-only이며, 추천에는 evidence와 guardrail 결과가 포함되어야 한다. |
 | Human review 경계 | 높은 불확실성, unsafe write, publication risk, source conflict는 review queue를 거친다. |
 | Product write 경계 | Stage 3 승인은 `control_tower.sqlite`에만 기록하며 Stage 1/2 산출물이나 현장 action을 변경하지 않는다. |
-| Public deploy 경계 | Stage 3가 local demo-ready여도 Stage 1 live snapshot readiness가 부족하면 public deploy는 차단된다. |
+| Public deploy 경계 | Upstream claim readiness와 endpoint deployment readiness를 분리한다. Stage 1/2가 준비돼도 Stage 3 write auth가 없으면 public endpoint는 차단된다. |
 
 ## 현재 배포 해석
 
-이 suite는 local 실행과 포트폴리오 검토가 가능하지만, public deployment는 의도적으로 차단된 상태다.
+이 suite는 local 실행과 포트폴리오 검토가 가능하고 upstream evidence/claim gate도 준비된 상태다. 다만 public endpoint deployment는 인증 hardening 전까지 의도적으로 차단한다.
 
-- Stage 1 live station snapshot readiness가 아직 2주 검증 목표에 못 미친다.
+- Stage 1은 cutoff가 고정된 340개 snapshot, 14.01일 cohort로 prospective validation을 통과했다.
 - Stage 2는 평가 가능 상태지만 production mode의 LLM-backed planner는 아직 붙이지 않았다.
-- Stage 3는 API, dashboard, approval persistence, monitoring, deployment readiness를 가진 local/container product slice다.
+- Stage 3는 API, dashboard, approval persistence, monitoring, deployment readiness를 가진 local/container product slice이며, hosted/public endpoint는 write auth 미설정으로 `NO_GO`다.

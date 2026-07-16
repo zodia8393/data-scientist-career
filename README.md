@@ -10,6 +10,8 @@
 | `agentic-decisionops-workbench` | portfolio-ready | 운영 ML 산출물과 NY 511 public incident sample을 MCP-style tools, FastAPI guardrail boundary, holdout eval, review queue로 연결 |
 | `decisionops-control-tower` | product-slice-ready | Stage 1/2 산출물을 FastAPI, OpenAPI, SQLite approval history, reviewer dashboard로 묶는 최종 capstone |
 
+2026-07-15 기준 upstream evidence와 claim gate는 `GO`이고, Workbench prepublish는 `public_ready`입니다. Control Tower의 hosted/public endpoint는 별도 운영 gate이며 write auth credential 미설정으로 `NO_GO`입니다. 최신 교차검증 결과는 `/DATA/HJ/prj/data-scientist-career/state/decisionops_suite_status.md`에서 확인합니다.
+
 ## 개인 이직 준비 도구
 
 | slug | 상태 | 요약 |
