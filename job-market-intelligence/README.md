@@ -1,8 +1,14 @@
 # Job Market Intelligence for DS Career Transition
 
+[![ci](https://github.com/zodia8393/data-scientist-career/actions/workflows/job-market-intelligence-ci.yml/badge.svg)](https://github.com/zodia8393/data-scientist-career/actions/workflows/job-market-intelligence-ci.yml)
+
+[핵심 수치](#핵심-수치) · [대표 결과](#대표-시각화와-결과) · [Quick Start](#설치) · [공식 API](#공식-api-현황) · [검증](#검증)
+
 ## 결론
 
 공식 채용공고 API와 fixture fallback을 이용해 Data Scientist / Applied AI / ML Engineer / Product Data Scientist 이직 시장을 수집, 표준화, 분석하고 개인 profile 기반 지원 우선순위를 산출하는 재현 가능한 포트폴리오 프로젝트다.
+
+> **Demo snapshot · 2026-07-16** — Official API boundary · No unauthorized scraping · Fixture 6→5→4 · Explainable scoring · 11 tests passed
 
 ## 핵심 수치
 
@@ -11,8 +17,10 @@
 | Provider 구조 | 4개 고려 | Saramin, 고용24/워크넷, Wanted, JobKorea를 공식 API 기준으로 분리 |
 | 실제 collector | 1개 | Saramin API는 `SARAMIN_ACCESS_KEY`가 있으면 실제 호출 가능 |
 | Fixture demo | 지원 | API key 없이 end-to-end 검증 가능 |
+| Demo funnel | 6 → 5 → 4 | raw → DS/AI target → deduplicated/scored jobs |
 | 표준 schema | 16+ fields | 공고 출처가 달라도 같은 분석/점수화 파이프라인 사용 |
 | Score components | 7개 | role, skill, domain, experience, location, evidence, risk penalty |
+| Verified tests | 11 passed | provider, normalization, scoring, reporting 회귀 확인 |
 
 ## 무엇을 만들었나
 
@@ -40,10 +48,30 @@
 | Rule-based scoring | 이력서 포트폴리오에서는 설명 가능한 점수 근거가 black-box 추천보다 강함 |
 | Static report | 배포 없이도 README와 산출물만으로 평가자가 확인 가능 |
 
+## 대표 시각화와 결과
+
+```text
+official API / fixture
+          |
+          v
+6 raw jobs → 5 DS/AI targets → 4 deduplicated jobs
+          |
+          v
+explainable fit score → skill gap → resume bullet draft → next action
+```
+
+| 먼저 볼 것 | 확인할 내용 |
+|---|---|
+| [Markdown report](reports/job_market_report.md) | 시장 요약, 추천 공고, skill gap, 다음 action |
+| [HTML report](reports/job_market_report.html) | 평가자가 바로 열어볼 수 있는 static presentation |
+| [Portfolio story](docs/portfolio_story.md) | 문제 정의부터 career decision으로 이어지는 설명 |
+| [API source notes](docs/api_sources.md) | provider별 공식 문서와 인증·scraping 경계 |
+
 ## 설치
 
 ```bash
-cd /workspace/prj/personal/data-scientist-career/job-market-intelligence
+git clone https://github.com/zodia8393/data-scientist-career.git
+cd data-scientist-career/job-market-intelligence
 python3 -m venv .venv
 . .venv/bin/activate
 pip install -r requirements.txt
@@ -118,6 +146,16 @@ python3 -m pytest
 - raw latest item 수와 normalized/scored row 수가 출력된다.
 - fixture 6건 중 DS/AI target 5건, 중복 제거 후 4건이 남는다.
 - Top 추천 공고마다 score breakdown, skill gap, resume bullet 초안이 생성된다.
+
+## Repository Guide
+
+| 경로 | 역할 |
+|---|---|
+| [`job_market_intel`](job_market_intel) | collector, normalization, scoring, reporting package |
+| [`job_market_intel/providers`](job_market_intel/providers) | provider별 공식 API adapter와 fixture fallback |
+| [`tests`](tests) | provider·schema·score·report regression |
+| [`docs`](docs) | API source, data contract, portfolio story |
+| [`reports`](reports) | 재현 가능한 Markdown/HTML demo output |
 
 ## 한계
 

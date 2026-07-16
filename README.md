@@ -1,38 +1,56 @@
 # Data Scientist Career Portfolio
 
-주말 단위로 데이터 사이언스 포트폴리오 프로젝트와 이직 준비용 개인 도구를 만들고 개선하는 로컬 Codex 작업 영역입니다. 완성된 소스 repo는 `/workspace/prj/personal/data-scientist-career/<project-slug>`에 두고, 데이터·모델·큰 산출물은 `/DATA/HJ/prj/data-scientist-career/projects/<project-slug>`에 둡니다.
+[![Workbench CI](https://github.com/zodia8393/agentic-decisionops-workbench/actions/workflows/ci.yml/badge.svg)](https://github.com/zodia8393/agentic-decisionops-workbench/actions/workflows/ci.yml)
+[![Bike CI](https://github.com/zodia8393/bike-share-demand-resilience/actions/workflows/ci.yml/badge.svg)](https://github.com/zodia8393/bike-share-demand-resilience/actions/workflows/ci.yml)
+[![Control CI](https://github.com/zodia8393/decisionops-control-tower/actions/workflows/ci.yml/badge.svg)](https://github.com/zodia8393/decisionops-control-tower/actions/workflows/ci.yml)
+
+예측 모델을 만드는 데서 끝내지 않고, **검증 가능한 evidence → guarded decision → human approval**로 이어지는 운영형 Data Science 포트폴리오입니다.
+
+> **Release snapshot · 2026-07-16** — Upstream evidence/claim `GO` · Workbench `public_ready` · Local/container demo `GO` · Hosted/public endpoint `NO_GO` (write auth 필요)
+
+## 한눈에 보기
+
+| 프로젝트 | 역할 | 현재 증거 |
+|---|---|---|
+| [Bike-Share Demand Resilience](https://github.com/zodia8393/bike-share-demand-resilience) | Stage 1 · 예측/검증 | frozen 340 snapshots, F1 0.8286, quality 96.0 |
+| [Agentic DecisionOps Workbench](https://github.com/zodia8393/agentic-decisionops-workbench) | Stage 2 · agent/eval/guardrail | main·holdout success 1.000, invalid action 0.000 |
+| [DecisionOps Control Tower](https://github.com/zodia8393/decisionops-control-tower) | Stage 3 · reviewer product | 12 impact cards, audit integrity `PASS`, container `GO` |
+| [Job Market Intelligence](job-market-intelligence) | Career tool · 공고 분석 | fixture 6→5→4, explainable fit score, 11 tests |
 
 ## DecisionOps Suite
 
-| slug | 상태 | 요약 |
+| Stage | 입력 → 출력 | 안전 경계 |
 |---|---|---|
-| `bike-share-demand-resilience` | portfolio-ready | 시간대별 공공자전거 수요 예측, 시간순 검증, conformal interval, segment audit, 재배치 최적화 데모 |
-| `agentic-decisionops-workbench` | portfolio-ready | 운영 ML 산출물과 NY 511 public incident sample을 MCP-style tools, FastAPI guardrail boundary, holdout eval, review queue로 연결 |
-| `decisionops-control-tower` | product-slice-ready | Stage 1/2 산출물을 FastAPI, OpenAPI, SQLite approval history, reviewer dashboard로 묶는 최종 capstone |
+| 1 · Bike | 수요·inventory → shortage risk와 재배치 후보 | frozen prospective validation 전에는 `NO_GO` |
+| 2 · Workbench | ML artifact → evidence-cited guarded decision | dispatch·public posting은 refuse/escalate |
+| 3 · Control | review queue → approval history와 deployment gate | write auth 없이는 hosted/public `NO_GO` |
 
-2026-07-15 기준 upstream evidence와 claim gate는 `GO`이고, Workbench prepublish는 `public_ready`입니다. Control Tower의 hosted/public endpoint는 별도 운영 gate이며 write auth credential 미설정으로 `NO_GO`입니다. 최신 교차검증 결과는 `/DATA/HJ/prj/data-scientist-career/state/decisionops_suite_status.md`에서 확인합니다.
+`GO`는 하나의 의미가 아닙니다. 현재 upstream evidence는 공개 검토가 가능하지만, 외부 endpoint 배포는 별도 인증 gate를 통과해야 합니다. 이 구분을 suite verifier와 각 README에서 동일하게 유지합니다.
 
-## 개인 이직 준비 도구
+## 평가자 추천 읽기 순서
 
-| slug | 상태 | 요약 |
-|---|---|---|
-| `job-market-intelligence` | demo-ready | 한국 채용공고 공식 API/fixture 기반 DS 이직 시장 분석, fit score, skill gap, resume bullet 추천 시스템. DecisionOps Suite에 묶지 않는다. |
+1. [Bike 핵심 수치](https://github.com/zodia8393/bike-share-demand-resilience#핵심-수치)에서 모델·cohort·drift 근거를 확인합니다.
+2. [Workbench guardrail](https://github.com/zodia8393/agentic-decisionops-workbench#현재-상태)에서 자동 실행을 막는 평가 계약을 봅니다.
+3. [Control dashboard](https://github.com/zodia8393/decisionops-control-tower#대표-시각화)에서 reviewer workflow와 audit trail을 확인합니다.
+4. [Job Market Intelligence](job-market-intelligence#핵심-수치)에서 포트폴리오와 실제 지원 우선순위의 연결을 봅니다.
 
-상세 상태와 산출물 경로는 `registry/projects.json`를 기준으로 봅니다. Registry의 `portfolio_track`과 `decisionops_suite` 값으로 DecisionOps 묶음과 개인 이직 준비 도구를 구분합니다.
-
-## 로컬 Codex Workflow
-
-- 절차 문서: `docs/weekend_local_codex_workflow.md`
-- Research/Product 자동화 기준: `docs/weekend_research_portfolio_automation.md`
-- 프로젝트 registry: `registry/projects.json`
-- 새 프로젝트 scaffold: `scripts/scaffold_weekend_project.py`
-- checklist validator: `scripts/validate_weekend_project.py`
-- DecisionOps suite verifier: `scripts/verify_decisionops_suite.py` (`job-market-intelligence` 제외)
-
-새 프로젝트 dry-run:
+## 빠른 검증
 
 ```bash
-cd /workspace/prj/personal/data-scientist-career
+python3 -m pytest -q
+python3 scripts/verify_decisionops_suite.py
+```
+
+최신 registry는 [registry/projects.json](registry/projects.json), suite 구조는 [docs/decisionops_suite_dfd.md](docs/decisionops_suite_dfd.md), 전체 완료 기록은 [docs/progress/decisionops-readiness-sync-20260715.md](docs/progress/decisionops-readiness-sync-20260715.md)에 있습니다.
+
+<details>
+<summary><strong>Portfolio automation과 scaffold</strong></summary>
+
+- 실행 절차: [docs/weekend_local_codex_workflow.md](docs/weekend_local_codex_workflow.md)
+- Research/Product 기준: [docs/weekend_research_portfolio_automation.md](docs/weekend_research_portfolio_automation.md)
+- Project validator: `scripts/validate_weekend_project.py`
+
+```bash
 python3 scripts/scaffold_weekend_project.py \
   --slug example-demand-forecast \
   --title "예시 수요 예측 프로젝트" \
@@ -40,24 +58,10 @@ python3 scripts/scaffold_weekend_project.py \
   --dry-run
 ```
 
-기존 프로젝트 checklist:
+</details>
 
-```bash
-python3 scripts/validate_weekend_project.py \
-  --project /workspace/prj/personal/data-scientist-career/bike-share-demand-resilience \
-  --stage sunday
-```
+## 문서와 데이터 경계
 
-DecisionOps suite 상태 확인:
-
-```bash
-cd /workspace/prj/personal/data-scientist-career
-scripts/verify_decisionops_suite.py
-cat /DATA/HJ/prj/data-scientist-career/state/decisionops_suite_status.md
-```
-
-## 문서 정책
-
-사용자-facing 문서와 보고서는 한국어를 기본으로 작성합니다. code identifier, command, model name, metric, path는 English를 유지합니다. 큰 생성물은 Git에 넣지 않고 `/DATA/HJ` 아래에 둡니다.
-
-검토자 체크: 이 README/보고서가 사람이 쓴 문체로 읽히는가?(예/아니오)
+- 사용자-facing 문서는 한국어를 기본으로 하고 identifier, API, metric은 English를 유지합니다.
+- Raw data, model, 대형 생성물은 source repository와 분리하며 Git에는 재현 코드와 경량 evidence만 둡니다.
+- Credential, `.env`, 개인 profile 값은 README, report, screenshot에 남기지 않습니다.
